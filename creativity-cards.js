@@ -224,21 +224,21 @@ class CreativityCardsGame {
                 flex-direction: column;
                 justify-content: space-between;
                 /* padding מותאם לנייר הקלף: למטה לסלוטייפ, לצדדים לקצוות הקרועים */
-                padding: 15% 13% 14%;
+                padding: 13% 11% 11%;
             }
-            ${s} .ccg-card-text { flex: 1; overflow-y: auto; scrollbar-width: thin; padding-bottom: 8px; }
+            ${s} .ccg-card-text { flex: 1; overflow-y: auto; scrollbar-width: thin; padding-bottom: 6px; }
             ${s} .ccg-card-title {
                 font-family: 'OHEyalMeirBerkowitz', 'Heebo', sans-serif;
-                font-size: clamp(14px, 2.2vw, 19px);
+                font-size: clamp(13px, 2vw, 17px);
                 font-weight: normal;
                 color: ${ctc};
-                margin: 0 0 8px;
-                line-height: 1.4;
+                margin: 0 0 6px;
+                line-height: 1.35;
             }
             ${s} .ccg-card-prompt {
                 font-family: 'OHEyalMeirBerkowitz', 'Heebo', sans-serif;
-                font-size: clamp(13px, 2vw, 17px);
-                line-height: 1.85;
+                font-size: clamp(12px, 1.8vw, 15px);
+                line-height: 1.6;
                 color: ${ctc};
                 margin: 0;
             }
@@ -246,7 +246,7 @@ class CreativityCardsGame {
             /* ─── כפתורים בתוך הקלף (תמונה + טקסט) ─────────────────────── */
             ${s} .ccg-inner-actions {
                 display: flex;
-                gap: 10px;
+                gap: 8px;
                 justify-content: center;
                 flex-shrink: 0;
                 flex-wrap: wrap;
@@ -258,20 +258,20 @@ class CreativityCardsGame {
                 background: transparent;
                 padding: 0;
                 cursor: pointer;
-                width: min(160px, 38vw);
+                width: min(130px, 30vw);
                 transition: transform .15s ease, filter .15s ease;
             }
             ${s} .ccg-inner-btn img { grid-area: 1/1; width: 100%; height: auto; display: block; }
             ${s} .ccg-inner-btn span {
                 grid-area: 1/1;
                 font-family: '${ff}', sans-serif;
-                font-size: clamp(11px, 1.6vw, 14px);
+                font-size: clamp(10px, 1.4vw, 12px);
                 font-weight: 700;
                 color: #1a1a1a;
                 z-index: 1;
                 pointer-events: none;
                 text-align: center;
-                padding: 0 8px;
+                padding: 0 6px;
             }
             ${s} .ccg-inner-btn:hover  { transform: translate(-2px,-2px); filter: drop-shadow(3px 3px 0 rgba(0,0,0,.3)); }
             ${s} .ccg-inner-btn:active { transform: translate(1px,1px);   filter: drop-shadow(1px 1px 0 rgba(0,0,0,.25)); }
