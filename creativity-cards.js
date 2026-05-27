@@ -227,36 +227,34 @@ class CreativityCardsGame {
                 gap: 24px;
             }
 
-            /* קלף — תמונה + שכבת טקסט */
+            /* קלף — תמונה + שכבת טקסט (CSS Grid: שניהם בתא אחד, ללא position:absolute) */
             ${s} .ccg-card-visual-wrapper {
-                position: relative;
-                max-width: min(380px, 86vw);
+                display: grid;
+                grid-template-areas: "card";
+                max-width: min(480px, 88vw);
                 width: 100%;
-                /* aspect-ratio קבוע כך ש-wrapper תמיד בגובה נכון — גם לפני שהתמונה נטענת */
-                aspect-ratio: 1306 / 1796;
+                /* aspect-ratio לפי card-front.png: 1118×1677 */
+                aspect-ratio: 1118 / 1677;
                 animation: ccgCardIn .45s cubic-bezier(.215,.61,.355,1);
-                filter: drop-shadow(0 6px 24px rgba(0,0,0,.18));
             }
             ${s} .ccg-card-img {
-                /* התמונה ממלאת את ה-wrapper בדיוק */
-                position: absolute;
-                inset: 0;
+                grid-area: card;
                 width: 100%;
                 height: 100%;
                 object-fit: contain;
                 display: block;
                 user-select: none;
                 pointer-events: none;
+                filter: drop-shadow(0 8px 30px rgba(0,0,0,.22));
             }
-            /* שכבת הטקסט על פני הקלף */
+            /* שכבת הטקסט — גם היא בתא "card", מסודרת מעל התמונה */
             ${s} .ccg-card-overlay {
-                position: absolute;
-                inset: 0;
-                /* padding מכוון את הטקסט לאזור הנייר — מתחת לסלוטייפ ובתוך השוליים */
-                padding: 17% 12% 7% 10%;
+                grid-area: card;
+                /* padding דוחף את הטקסט לאזור הנייר הלבן שמתחת לסלוטייפ */
+                padding: 20% 14% 9% 12%;
                 display: flex;
                 flex-direction: column;
-                gap: 6px;
+                gap: 5px;
                 overflow-y: auto;
                 scrollbar-width: thin;
                 scrollbar-color: rgba(0,0,0,.2) transparent;
@@ -384,6 +382,22 @@ class CreativityCardsGame {
                 from { opacity: 0; transform: translateY(22px) scale(.95); }
                 to   { opacity: 1; transform: translateY(0)    scale(1);   }
             }
+            /* אנימציית ערבוב — הערמה מתנדנדת לפני שליפת קלף */
+            @keyframes ccgShuffle {
+                0%   { transform: rotate(0deg)   translateY(0)    scale(1);    }
+                12%  { transform: rotate(-12deg) translateY(-14px) scale(1.06); }
+                28%  { transform: rotate(12deg)  translateY(-18px) scale(1.08); }
+                44%  { transform: rotate(-9deg)  translateY(-12px) scale(1.05); }
+                60%  { transform: rotate(7deg)   translateY(-6px)  scale(1.03); }
+                76%  { transform: rotate(-4deg)  translateY(-2px)  scale(1.01); }
+                88%  { transform: rotate(2deg)   translateY(0); }
+                100% { transform: rotate(0deg)   translateY(0)    scale(1);    }
+            }
+            ${s} .ccg-stack-img.shuffling {
+                animation: ccgShuffle .65s cubic-bezier(.36,.07,.19,.97) forwards;
+                cursor: default;
+                pointer-events: none;
+            }
 
             /* שורת "קלף חדש" + שיתוף */
             ${s} .ccg-card-bottom-row {
@@ -494,12 +508,31 @@ class CreativityCardsGame {
 
     revealCard() {
         if (!this.state.deck.length) { this.renderDeckEmpty(); return; }
-        // שולף קלף אקראי מהחפיסה
-        const idx = Math.floor(Math.random() * this.state.deck.length);
-        const [card] = this.state.deck.splice(idx, 1);
-        this.state.usedCards.push(card);
-        this.state.currentCard = card;
-        this.renderCard(card);
+
+        let revealed = false;
+        const doReveal = () => {
+            if (revealed) return;
+            revealed = true;
+            const idx = Math.floor(Math.random() * this.state.deck.length);
+            const [card] = this.state.deck.splice(idx, 1);
+            this.state.usedCards.push(card);
+            this.state.currentCard = card;
+            this.renderCard(card);
+        };
+
+        const stackImg = this.container.querySelector('.ccg-stack-img');
+        const pickBtn  = this.container.querySelector('.ccg-pick-btn');
+
+        if (stackImg) {
+            // חסום כפתורים ותן לאנימציה לרוץ קודם
+            if (pickBtn) pickBtn.disabled = true;
+            stackImg.classList.add('shuffling');
+            // אחרי האנימציה (650ms) — שלוף קלף; fallback ב-800ms
+            stackImg.addEventListener('animationend', doReveal, { once: true });
+            setTimeout(doReveal, 800);
+        } else {
+            doReveal();
+        }
     }
 
     renderCard(card) {
@@ -508,7 +541,7 @@ class CreativityCardsGame {
         const newBtnLabel   = remaining ? this.config.new_card_button_label : 'ערבוב מחדש 🔀';
 
         const cardImg = this.config.assets_url
-            ? `<img src="${this.config.assets_url}card-front-straight.png"
+            ? `<img src="${this.config.assets_url}card-front.png"
                      alt="קלף יצירתיות" class="ccg-card-img">`
             : '';
 
