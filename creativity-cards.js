@@ -204,31 +204,22 @@ class CreativityCardsGame {
                 gap: 10px;
             }
 
-            /* קלף: position:relative כך שה-overlay יוכל לשבת עליו ב-absolute */
+            /* קלף: background-image — ללא position:absolute, ללא z-index */
             ${s} .ccg-card-visual-wrapper {
-                position: relative;
                 /* גובה מקסימלי 68vh — משאיר מקום לכפתורים מתחת */
                 width: min(540px, 92vw, calc(68vh * 1306 / 1796));
                 aspect-ratio: 1306 / 1796;
                 animation: ccgCardIn .45s cubic-bezier(.215,.61,.355,1);
                 flex-shrink: 0;
-            }
-            ${s} .ccg-card-img {
-                position: absolute;
-                inset: 0;
-                width: 100%;
-                height: 100%;
-                object-fit: contain;
-                display: block;
-                user-select: none;
-                pointer-events: none;
+                /* תמונת הקלף כ-background — ללא <img> + position:absolute */
+                background: url('${a}card-front-straight.png') center / contain no-repeat;
                 filter: drop-shadow(0 10px 32px rgba(0,0,0,.22));
+                display: flex;
+                flex-direction: column;
             }
-            /* overlay מכסה את כל שטח הקלף בדיוק, מעל התמונה */
+            /* overlay כ-flex child — ללא position:absolute, ללא z-index */
             ${s} .ccg-card-overlay {
-                position: absolute;
-                inset: 0;
-                z-index: 2;
+                flex: 1;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
@@ -675,10 +666,6 @@ class CreativityCardsGame {
         const newBtnLabel   = remaining ? this.config.new_card_button_label : 'ערבוב מחדש 🔀';
         const a             = this.config.assets_url;
 
-        const cardImg = a
-            ? `<img src="${a}card-front-straight.png" alt="קלף יצירתיות" class="ccg-card-img">`
-            : '';
-
         // כפתור שיתוף: label = share_text הספציפי מהקלף, fallback = מהקונפיג
         const rawShare  = card.share_text?.trim();
         const shareLabel = rawShare
@@ -694,7 +681,6 @@ class CreativityCardsGame {
                 ${this.logoHtml('ccg-logo-small')}
 
                 <div class="ccg-card-visual-wrapper">
-                    ${cardImg}
                     <div class="ccg-card-overlay" dir="rtl">
                         <div class="ccg-card-text">
                             ${card.title ? `<h2 class="ccg-card-title">${this.escapeHtml(card.title)}</h2>` : ''}
