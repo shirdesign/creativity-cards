@@ -679,10 +679,14 @@ class CreativityCardsGame {
     }
 
     renderCard(card) {
-        // מעדכן את ה-URL ל-hash ייחודי לקלף הזה — לשיתוף ישיר
+        // מעדכן את ה-URL ל-hash מספרי ייחודי לקלף — לשיתוף ישיר
         try {
-            if (card.title && history.replaceState)
-                history.replaceState(null, '', '#card=' + encodeURIComponent(card.title));
+            if (history.replaceState) {
+                const idx = this.state.allCards.findIndex(
+                    c => c.title === card.title && c.prompt === card.prompt);
+                if (idx !== -1)
+                    history.replaceState(null, '', '#card=' + (idx + 1));
+            }
         } catch {}
 
         const remaining     = this.state.deck.length;
@@ -883,16 +887,17 @@ class CreativityCardsGame {
         }
     }
 
-    // ── ניווט ישיר לקלף לפי URL hash: #card=כותרת ──────────────────────────
+    // ── ניווט ישיר לקלף לפי URL hash: #card=מספר (1-based) ─────────────────
     _showHashCard() {
         try {
             const hash = window.location.hash;
             if (!hash.startsWith('#card=')) return false;
-            const title = decodeURIComponent(hash.slice(6));
-            const card  = this.state.allCards.find(c => c.title === title);
+            const num  = parseInt(hash.slice(6), 10);
+            if (!Number.isFinite(num) || num < 1 || num > this.state.allCards.length) return false;
+            const card = this.state.allCards[num - 1];
             if (!card) return false;
             // מוציא מהחפיסה ומציג
-            const di = this.state.deck.findIndex(c => c.title === title);
+            const di = this.state.deck.findIndex(c => c.title === card.title && c.prompt === card.prompt);
             if (di !== -1) this.state.deck.splice(di, 1);
             this.state.usedCards.push(card);
             this.state.currentCard = card;
