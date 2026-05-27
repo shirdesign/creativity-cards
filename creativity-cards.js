@@ -217,13 +217,14 @@ class CreativityCardsGame {
                 pointer-events: none;
                 filter: drop-shadow(0 10px 32px rgba(0,0,0,.22));
             }
-            /* טקסט מעל התמונה — אותו תא גריד, z-index גבוה יותר */
+            /* טקסט מעל התמונה — z-index מפורש מכניע את stacking-context של filter */
             ${s} .ccg-card-overlay {
                 grid-area: card;
+                position: relative;
+                z-index: 2;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
-                /* padding מותאם לנייר הקלף: למטה לסלוטייפ, לצדדים לקצוות הקרועים */
                 padding: 13% 11% 11%;
             }
             ${s} .ccg-card-text { flex: 1; overflow-y: auto; scrollbar-width: thin; padding-bottom: 6px; }
@@ -390,6 +391,62 @@ class CreativityCardsGame {
                 pointer-events: none;
             }
 
+            /* ── ערמת קלפים — מסך בחירה ─────────────────────────────── */
+            ${s} .ccg-deck-wrap {
+                position: relative;
+                width: min(200px, 46vw);
+                aspect-ratio: 1306 / 1796;
+                cursor: pointer;
+                margin-bottom: 28px;
+                flex-shrink: 0;
+            }
+            ${s} .ccg-deck-card {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0; left: 0;
+                object-fit: contain;
+                display: block;
+                filter: drop-shadow(0 6px 18px rgba(0,0,0,.25));
+                transition: filter .15s ease;
+            }
+            ${s} .ccg-deck-c3 { transform: rotate(-8deg)  translate(-7px, 9px);  z-index: 1; }
+            ${s} .ccg-deck-c2 { transform: rotate(-3deg)  translate(-2px, 3px);  z-index: 2; }
+            ${s} .ccg-deck-c1 { transform: rotate( 3deg);                        z-index: 3; }
+            ${s} .ccg-deck-wrap:hover .ccg-deck-c1 { filter: drop-shadow(0 10px 26px rgba(0,0,0,.35)); }
+
+            @keyframes ccgDeckS1 {
+                0%,100% { transform: rotate(3deg); }
+                20%  { transform: rotate(-22deg) translate(-24px,-20px); }
+                45%  { transform: rotate(20deg)  translate(20px, -14px); }
+                70%  { transform: rotate(-8deg)  translate(-8px,  -4px); }
+                88%  { transform: rotate(4deg); }
+            }
+            @keyframes ccgDeckS2 {
+                0%,100% { transform: rotate(-3deg) translate(-2px,  3px); }
+                20%  { transform: rotate(-26deg) translate(-28px,-16px); }
+                45%  { transform: rotate(15deg)  translate(15px, -10px); }
+                70%  { transform: rotate(-5deg)  translate(-5px,  -1px); }
+                88%  { transform: rotate(-2deg)  translate(-2px,   2px); }
+            }
+            @keyframes ccgDeckS3 {
+                0%,100% { transform: rotate(-8deg) translate(-7px, 9px); }
+                20%  { transform: rotate(-30deg) translate(-32px,-12px); }
+                45%  { transform: rotate(10deg)  translate(10px,  -6px); }
+                70%  { transform: rotate(-3deg)  translate(-3px,   2px); }
+                88%  { transform: rotate(-7deg)  translate(-6px,   8px); }
+            }
+            ${s} .ccg-deck-wrap.shuffling { pointer-events: none; }
+            ${s} .ccg-deck-wrap.shuffling .ccg-deck-c1 {
+                animation: ccgDeckS1 .72s cubic-bezier(.36,.07,.19,.97) forwards;
+            }
+            ${s} .ccg-deck-wrap.shuffling .ccg-deck-c2 {
+                animation: ccgDeckS2 .72s cubic-bezier(.36,.07,.19,.97) .05s forwards;
+            }
+            ${s} .ccg-deck-wrap.shuffling .ccg-deck-c3 {
+                animation: ccgDeckS3 .72s cubic-bezier(.36,.07,.19,.97) .10s forwards;
+            }
+
             /* טקסט על מסך הבחירה */
             ${s} .ccg-shuffle-text {
                 font-size: clamp(14px,1.8vw,17px);
@@ -490,14 +547,22 @@ class CreativityCardsGame {
 
         this.container.innerHTML = `
             <div class="ccg ccg-selection">
+                <!-- ערמת קלפים — לחיצה או כפתור מפעילים את הערבוב -->
+                <div class="ccg-deck-wrap ccg-pick-target" role="button" aria-label="${btnLabel}" tabindex="0">
+                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c3" alt="" loading="lazy">
+                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c2" alt="" loading="lazy">
+                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c1" alt="ערמת קלפים" loading="lazy">
+                </div>
                 <button type="button" class="ccg-btn-enter ccg-pick-btn">
                     <img src="${a}btn-enter.png" alt="${btnLabel}" loading="lazy">
                     <span>${btnLabel}</span>
                 </button>
             </div>`;
 
-        this.container.querySelector('.ccg-pick-btn')
-            ?.addEventListener('click', () => this.revealCard());
+        const pick = () => this.revealCard();
+        this.container.querySelector('.ccg-pick-target')?.addEventListener('click', pick);
+        this.container.querySelector('.ccg-pick-target')?.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') pick(); });
+        this.container.querySelector('.ccg-pick-btn')?.addEventListener('click', pick);
     }
 
     revealCard() {
@@ -514,17 +579,18 @@ class CreativityCardsGame {
             this.renderCard(card);
         };
 
-        const stackImg = this.container.querySelector('.ccg-stack-img');
+        const deckWrap = this.container.querySelector('.ccg-deck-wrap');
         const pickBtn  = this.container.querySelector('.ccg-pick-btn');
 
-        if (stackImg) {
-            // אנימציה על תמונת הערמה (שמור לתאימות)
+        if (deckWrap) {
+            // אנימציית ערבוב על כל הקלפים בערימה
             if (pickBtn) pickBtn.disabled = true;
-            stackImg.classList.add('shuffling');
-            stackImg.addEventListener('animationend', doReveal, { once: true });
-            setTimeout(doReveal, 800);
+            deckWrap.classList.add('shuffling');
+            // מחכים לסוף אנימציית הקלף הראשון; fallback ב-900ms
+            deckWrap.querySelector('.ccg-deck-c1')?.addEventListener('animationend', doReveal, { once: true });
+            setTimeout(doReveal, 900);
         } else if (pickBtn) {
-            // אנימציית ערבוב על כפתור הבחירה עצמו
+            // fallback: אנימציה על הכפתור עצמו
             pickBtn.disabled = true;
             pickBtn.classList.add('shuffling');
             pickBtn.addEventListener('animationend', doReveal, { once: true });
@@ -544,9 +610,12 @@ class CreativityCardsGame {
             ? `<img src="${a}card-front-straight.png" alt="קלף יצירתיות" class="ccg-card-img">`
             : '';
 
-        // כפתור שיתוף: הטקסט = share_text הספציפי של הקלף (ממיר שורות לרווח)
-        const shareLabel = this.escapeHtml(card.share_text || this.config.share_button_label || '🔗 שתפי').replace(/<br>/g, ' ');
-        const shareBtn = (this.config.allow_sharing && (card.share_text || card.prompt))
+        // כפתור שיתוף: label = share_text הספציפי מהקלף, fallback = מהקונפיג
+        const rawShare  = card.share_text?.trim();
+        const shareLabel = rawShare
+            ? this.escapeHtml(rawShare).replace(/<br>/g, ' ')
+            : (this.config.share_button_label?.replace(/^🔗\s*/,'') || 'שתפי');
+        const shareBtn = this.config.allow_sharing
             ? `<button type="button" class="ccg-share-button" data-action="share">🔗 ${shareLabel}</button>`
             : '';
 
@@ -654,22 +723,35 @@ class CreativityCardsGame {
     }
 
     async shareCard(card) {
-        // משתמשת ב-share_text הספציפי של הקלף, ולא בטקסט כללי
-        const text = card.share_text || card.prompt || '';
+        const text = (card.share_text?.trim() || card.prompt || '').trim();
+        // במובייל — שיתוף native (ווטסאפ, אינסטגרם וכו')
+        // בדסקטופ — תמיד העתק ללוח (navigator.share פותח בדסקטופ חלון ריק)
+        const isMobile = navigator.maxTouchPoints > 1 || /Mobi|Android/i.test(navigator.userAgent);
         try {
-            if (navigator.share) {
-                // שיתוף native — פותח את menu השיתוף של הטלפון/מחשב
+            if (isMobile && navigator.share) {
                 await navigator.share({ text });
             } else if (navigator.clipboard?.writeText) {
                 await navigator.clipboard.writeText(text);
-                this.showStatus('הטקסט הועתק! אפשר להדביק בכל מקום.', 'success');
+                this.showStatus('✅ הטקסט הועתק! הדביקי בוואטסאפ, אינסטגרם, או כל מקום.', 'success');
             } else {
-                this.showStatus('הדפדפן לא תומך בשיתוף אוטומטי.', 'warning');
+                // fallback עתיק — prompt לעתים
+                window.prompt('העתיקי את הטקסט (Ctrl+C / Cmd+C):', text);
             }
         } catch (err) {
-            // המשתמשת ביטלה את השיתוף — לא שגיאה אמיתית
             if (err?.name !== 'AbortError') {
-                this.showStatus('לא הצלחנו לשתף עכשיו.', 'warning');
+                // clipboard נכשל? ננסה שוב בשיטה ישנה
+                try {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.cssText = 'position:fixed;opacity:0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                    this.showStatus('✅ הועתק! הדביקי בוואטסאפ או כל מקום.', 'success');
+                } catch {
+                    this.showStatus('לא הצלחנו לשתף כרגע — נסי שוב.', 'warning');
+                }
             }
         }
     }
@@ -780,6 +862,9 @@ class CreativityCardsGame {
 
     // ── CSV parser מלא — מטפל בתאים מרובי-שורות בתוך מרכאות ──────────────────
     parseCsv(text) {
+        // הסרת UTF-8 BOM אם קיים (Google Sheets לפעמים מוסיף אותו)
+        if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+
         const rows = [];
         let row = [], cur = '', inQ = false, i = 0;
 
@@ -844,7 +929,7 @@ class CreativityCardsGame {
             prompt,
             follow_up:     get('follow_up','followup','המשך','רעיון המשך'),
             encouragement: get('encouragement','עידוד','celebration'),
-            share_text:    get('share_text','share','שיתוף')
+            share_text:    get('share_text','share','שיתוף','share text','לשיתוף','טקסט שיתוף','share_label')
         };
     }
 
