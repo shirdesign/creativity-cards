@@ -230,12 +230,12 @@ class CreativityCardsGame {
                 flex-direction: column;
                 justify-content: space-between;
                 /* padding מפנה מהסלוטייפ למעלה ומהשוליים הקרועים מהצדדים */
-                padding: 14% 10% 10%;
+                padding: 22% 10% 10%;
             }
             ${s} .ccg-card-text { flex: 1; overflow-y: auto; scrollbar-width: thin; padding-bottom: 6px; }
             ${s} .ccg-card-title {
                 font-family: 'OHEyalMeirBerkowitz', 'Heebo', sans-serif;
-                font-size: clamp(13px, 2vw, 17px);
+                font-size: clamp(19px, 3vw, 25px);
                 font-weight: normal;
                 color: ${ctc};
                 margin: 0 0 6px;
@@ -243,7 +243,7 @@ class CreativityCardsGame {
             }
             ${s} .ccg-card-prompt {
                 font-family: 'OHEyalMeirBerkowitz', 'Heebo', sans-serif;
-                font-size: clamp(12px, 1.8vw, 15px);
+                font-size: clamp(18px, 2.7vw, 22px);
                 line-height: 1.6;
                 color: ${ctc};
                 margin: 0;
@@ -264,7 +264,7 @@ class CreativityCardsGame {
                 background: transparent;
                 padding: 0;
                 cursor: pointer;
-                width: min(195px, 46vw);
+                width: min(234px, 55vw);
                 transition: transform .15s ease, filter .15s ease;
             }
             ${s} .ccg-inner-btn img { grid-area: 1/1; width: 100%; height: auto; display: block; }
@@ -558,7 +558,7 @@ class CreativityCardsGame {
 
             /* ── מובייל ─────────────────────────────────────────────────── */
             @media (max-width: 480px) {
-                ${s} .ccg-card-open { padding: 6px 8px; gap: 8px; }
+                ${s} .ccg-card-open { padding: 140px 8px 8px; gap: 8px; }
                 ${s} .ccg-card-visual-wrapper { width: min(310px, 90vw, calc(56vh * 751 / 923)); }
                 ${s} .ccg-card-open .ccg-logo-small { width: min(120px, 28vw); top: 8px; right: 10px; }
                 ${s} .ccg-inner-btn { width: min(145px, 42vw); }
