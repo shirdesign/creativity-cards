@@ -276,8 +276,11 @@ class CreativityCardsGame {
                 z-index: 1;
                 pointer-events: none;
                 text-align: center;
-                padding: 0 10px;
-                line-height: 1.25;
+                /* מגביל רוחב כדי שהטקסט יעבור ל-2 שורות */
+                width: 72%;
+                /* מזיז שמאלה+למעלה — מרחיק מסמן העכבר שבפינה ימין-תחתון */
+                transform: translate(-8px, -8px);
+                line-height: 1.3;
             }
             ${s} .ccg-inner-btn:hover  { transform: translate(-2px,-2px); filter: drop-shadow(3px 3px 0 rgba(0,0,0,.3)); }
             ${s} .ccg-inner-btn:active { transform: translate(1px,1px);   filter: drop-shadow(1px 1px 0 rgba(0,0,0,.25)); }
@@ -541,8 +544,9 @@ class CreativityCardsGame {
             ${s} .ccg-credit {
                 margin-top: auto;
                 padding: 8px 16px 10px;
-                font-size: clamp(11px, 1.4vw, 13px);
-                color: rgba(20,10,0,.45);
+                font-size: clamp(13px, 1.7vw, 16px);
+                color: rgba(20,10,0,.75);
+                font-weight: 700;
                 text-align: center;
                 flex-shrink: 0;
                 line-height: 1.4;
