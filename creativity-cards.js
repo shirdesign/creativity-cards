@@ -51,13 +51,17 @@ class CreativityCardsGame {
             allow_sharing:              toBool(config.allow_sharing, false),
             share_button_label:         config.share_button_label         || 'שתפי את הקלף',
             // עיצוב
-            assets_url:      config.assets_url      || './assets/',
-            primary_color:   config.primary_color   || '#F5C500',
-            secondary_color: config.secondary_color || '#FF7A00',
-            accent_color:    config.accent_color    || '#E88C78',
-            text_color:      config.text_color      || '#2a2a2a',
-            card_text_color: config.card_text_color || '#2a2a2a',
-            font_family:     config.font_family     || 'Heebo'
+            assets_url:       config.assets_url       || './assets/',
+            primary_color:    config.primary_color    || '#F5C500',
+            secondary_color:  config.secondary_color  || '#FF7A00',
+            accent_color:     config.accent_color     || '#E88C78',
+            text_color:       config.text_color       || '#2a2a2a',
+            card_text_color:  config.card_text_color  || '#2a2a2a',
+            font_family:      config.font_family      || 'Heebo',
+            // לוגו וקרדיט
+            client_logo_url:  config.client_logo_url  || '',
+            credit_text:      config.credit_text      || '',
+            credit_url:       config.credit_url       || ''
         };
 
         if (normalized.cards_per_session < 1) normalized.cards_per_session = 1;
@@ -502,6 +506,40 @@ class CreativityCardsGame {
             ${s} .ccg-btn-primary:hover  { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 #1a1a1a; }
             ${s} .ccg-btn-primary:active { transform: translate(1px,1px);   box-shadow: 1px 1px 0 #1a1a1a; }
 
+            /* ── לוגו לקוחה ─────────────────────────────────────────────── */
+            ${s} .ccg-logo-main {
+                width: min(130px, 28vw);
+                height: auto;
+                display: block;
+                margin: 0 auto 4px;
+                flex-shrink: 0;
+            }
+            ${s} .ccg-logo-small {
+                width: min(80px, 18vw);
+                height: auto;
+                display: block;
+                opacity: .88;
+                flex-shrink: 0;
+            }
+
+            /* ── קרדיט תחתון ────────────────────────────────────────────── */
+            ${s} .ccg-credit {
+                margin-top: auto;
+                padding: 8px 16px 10px;
+                font-size: clamp(11px, 1.4vw, 13px);
+                color: rgba(20,10,0,.45);
+                text-align: center;
+                flex-shrink: 0;
+                line-height: 1.4;
+            }
+            ${s} .ccg-credit a {
+                color: inherit;
+                text-decoration: underline;
+                text-underline-offset: 2px;
+                transition: color .15s ease;
+            }
+            ${s} .ccg-credit a:hover { color: rgba(20,10,0,.75); }
+
             /* ── מובייל ─────────────────────────────────────────────────── */
             @media (max-width: 480px) {
                 ${s} .ccg-card-open { padding: 6px 8px; gap: 8px; }
@@ -515,6 +553,20 @@ class CreativityCardsGame {
             }
         `;
         document.head.appendChild(style);
+    }
+
+    // ── helpers: לוגו + קרדיט ────────────────────────────────────────────────
+    logoHtml(cls = 'ccg-logo-main') {
+        const src = this.config.client_logo_url;
+        return src ? `<img src="${src}" class="${cls}" alt="לוגו" loading="lazy">` : '';
+    }
+    creditHtml() {
+        const { credit_text, credit_url } = this.config;
+        if (!credit_text) return '';
+        const inner = credit_url
+            ? `<a href="${credit_url}" target="_blank" rel="noopener">${credit_text}</a>`
+            : credit_text;
+        return `<div class="ccg-credit">${inner}</div>`;
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -532,6 +584,7 @@ class CreativityCardsGame {
         this.container.innerHTML = `
             <div class="ccg ccg-start-screen">
                 <div class="ccg-start-overlay">
+                    ${this.logoHtml('ccg-logo-main')}
                     <h1 class="ccg-start-heading">${this.config.start_title}</h1>
                     <p class="ccg-start-subtitle">${this.config.start_subtitle}</p>
                     <button type="button" class="ccg-btn-enter ccg-start-btn">
@@ -539,6 +592,7 @@ class CreativityCardsGame {
                         <span>${btnLabel}</span>
                     </button>
                 </div>
+                ${this.creditHtml()}
             </div>`;
         this.container.querySelector('.ccg-start-btn')
             ?.addEventListener('click', () => this.renderCardSelection());
@@ -552,6 +606,7 @@ class CreativityCardsGame {
 
         this.container.innerHTML = `
             <div class="ccg ccg-selection">
+                ${this.logoHtml('ccg-logo-small')}
                 <!-- ערמת קלפים — לחיצה או כפתור מפעילים את הערבוב -->
                 <div class="ccg-deck-wrap ccg-pick-target" role="button" aria-label="${btnLabel}" tabindex="0">
                     <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c3" alt="" loading="lazy">
@@ -562,6 +617,7 @@ class CreativityCardsGame {
                     <img src="${a}btn-enter.png" alt="${btnLabel}" loading="lazy">
                     <span>${btnLabel}</span>
                 </button>
+                ${this.creditHtml()}
             </div>`;
 
         const pick = () => this.revealCard();
@@ -627,6 +683,8 @@ class CreativityCardsGame {
         this.container.innerHTML = `
             <div class="ccg ccg-card-open">
 
+                ${this.logoHtml('ccg-logo-small')}
+
                 <div class="ccg-card-visual-wrapper">
                     ${cardImg}
                     <div class="ccg-card-overlay" dir="rtl">
@@ -659,6 +717,7 @@ class CreativityCardsGame {
                 </div>
 
                 <div class="ccg-status" aria-live="polite"></div>
+                ${this.creditHtml()}
             </div>`;
 
         const followUpBox      = this.container.querySelector('#ccg-followup');

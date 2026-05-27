@@ -53,6 +53,13 @@ window.CREATIVITY_CARDS_CONFIG = {
     // ─── נתיב תמונות ────────────────────────────────────────────────────────
     assets_url: './assets/',
 
+    // ─── לוגו לקוחה ─────────────────────────────────────────────────────────
+    client_logo_url: './assets/logo-client.png',
+
+    // ─── קרדיט תחתון ────────────────────────────────────────────────────────
+    credit_text: 'עוצב ותוכנת ע"י מפצחות האגוזים',
+    credit_url:  'https://wizgameworld.com/',
+
     // ─── קלפים ידניים (גיבוי — רק אם cards_source = 'manual') ──────────────
     cards_manual: JSON.stringify([
         {
