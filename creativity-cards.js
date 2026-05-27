@@ -147,7 +147,7 @@ class CreativityCardsGame {
             ${s} .ccg-selection,
             ${s} .ccg-card-open,
             ${s} .ccg-empty-state {
-                background: ${a ? `url('${a}bg-inner.png') center center / cover no-repeat` : '#FDF6EC'};
+                background: ${a ? `url('${a}bg-main.png') center center / cover no-repeat` : '#FDF6EC'};
                 padding: clamp(20px,3vw,40px);
                 gap: 20px;
             }
