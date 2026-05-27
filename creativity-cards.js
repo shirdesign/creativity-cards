@@ -119,15 +119,15 @@ class CreativityCardsGame {
                 flex-direction: column;
                 position: relative;
             }
-            /* מסך פתיחה + בחירת קלף = תמונה עם הקפה (bg-inner) */
+            /* מסך פתיחה + בחירת קלף = bg-main = קפה + פתקיות */
             ${s} .ccg-start-screen,
             ${s} .ccg-selection,
             ${s} .ccg-empty-state {
-                background: ${a ? `url('${a}bg-inner.png') center center / cover no-repeat` : '#FFF5E0'};
+                background: ${a ? `url('${a}bg-main.png') center center / cover no-repeat` : '#FFF5E0'};
             }
-            /* מסך קלף פתוח = תמונה עם העיפרון (bg-main) */
+            /* מסך קלף פתוח = bg-inner = עץ נקי עם עיפרון */
             ${s} .ccg-card-open {
-                background: ${a ? `url('${a}bg-main.png') center center / cover no-repeat` : '#FDF6EC'};
+                background: ${a ? `url('${a}bg-inner.png') center center / cover no-repeat` : '#FDF6EC'};
             }
 
             /* ── מסך פתיחה ─────────────────────────────────────────────── */
@@ -190,6 +190,8 @@ class CreativityCardsGame {
                 color: #1a1a1a;
                 z-index: 1;
                 pointer-events: none;
+                /* מזיז שמאלה+למעלה — מרחיק מסמן העכבר שבתמונה */
+                transform: translate(-14px, -7px);
             }
             ${s} .ccg-btn-enter:hover  { transform: translate(-3px,-3px); filter: drop-shadow(5px 5px 0 rgba(0,0,0,.35)); }
             ${s} .ccg-btn-enter:active { transform: translate(1px,1px);   filter: drop-shadow(1px 1px 0 rgba(0,0,0,.3)); }
@@ -421,36 +423,42 @@ class CreativityCardsGame {
             ${s} .ccg-deck-c1 { transform: rotate( 3deg);                        z-index: 3; }
             ${s} .ccg-deck-wrap:hover .ccg-deck-c1 { filter: drop-shadow(0 10px 26px rgba(0,0,0,.35)); }
 
+            /*
+             * Fan-shuffle: הקלפים נפתחים כמו מניפה (c1 ימינה, c3 שמאלה)
+             * ואז מתקפלים בחזרה — כמו ערבוב חפיסת קלפים אמיתית
+             */
             @keyframes ccgDeckS1 {
+                /* קלף עליון — נפתח ימינה, חוזר */
                 0%,100% { transform: rotate(3deg); }
-                20%  { transform: rotate(-22deg) translate(-24px,-20px); }
-                45%  { transform: rotate(20deg)  translate(20px, -14px); }
-                70%  { transform: rotate(-8deg)  translate(-8px,  -4px); }
-                88%  { transform: rotate(4deg); }
+                25%     { transform: rotate(32deg)  translate(28px, -8px);  }
+                45%     { transform: rotate(38deg)  translate(35px, -12px); }
+                65%     { transform: rotate(22deg)  translate(18px, -5px);  }
+                82%     { transform: rotate(8deg)   translate(5px,  -1px);  }
             }
             @keyframes ccgDeckS2 {
-                0%,100% { transform: rotate(-3deg) translate(-2px,  3px); }
-                20%  { transform: rotate(-26deg) translate(-28px,-16px); }
-                45%  { transform: rotate(15deg)  translate(15px, -10px); }
-                70%  { transform: rotate(-5deg)  translate(-5px,  -1px); }
-                88%  { transform: rotate(-2deg)  translate(-2px,   2px); }
+                /* קלף אמצעי — עולה קצת ונשאר מרכזי */
+                0%,100% { transform: rotate(-3deg) translate(-2px, 3px); }
+                30%     { transform: rotate(0deg)  translate(0,   -18px); }
+                55%     { transform: rotate(2deg)  translate(4px,  -12px); }
+                75%     { transform: rotate(0deg)  translate(0,    -4px);  }
             }
             @keyframes ccgDeckS3 {
+                /* קלף תחתון — נפתח שמאלה, חוזר */
                 0%,100% { transform: rotate(-8deg) translate(-7px, 9px); }
-                20%  { transform: rotate(-30deg) translate(-32px,-12px); }
-                45%  { transform: rotate(10deg)  translate(10px,  -6px); }
-                70%  { transform: rotate(-3deg)  translate(-3px,   2px); }
-                88%  { transform: rotate(-7deg)  translate(-6px,   8px); }
+                25%     { transform: rotate(-34deg) translate(-32px, -8px);  }
+                45%     { transform: rotate(-40deg) translate(-40px, -12px); }
+                65%     { transform: rotate(-24deg) translate(-20px, -4px);  }
+                82%     { transform: rotate(-10deg) translate(-9px,  4px);   }
             }
             ${s} .ccg-deck-wrap.shuffling { pointer-events: none; }
             ${s} .ccg-deck-wrap.shuffling .ccg-deck-c1 {
-                animation: ccgDeckS1 .72s cubic-bezier(.36,.07,.19,.97) forwards;
+                animation: ccgDeckS1 .85s cubic-bezier(.25,.46,.45,.94) forwards;
             }
             ${s} .ccg-deck-wrap.shuffling .ccg-deck-c2 {
-                animation: ccgDeckS2 .72s cubic-bezier(.36,.07,.19,.97) .05s forwards;
+                animation: ccgDeckS2 .85s cubic-bezier(.25,.46,.45,.94) .04s forwards;
             }
             ${s} .ccg-deck-wrap.shuffling .ccg-deck-c3 {
-                animation: ccgDeckS3 .72s cubic-bezier(.36,.07,.19,.97) .10s forwards;
+                animation: ccgDeckS3 .85s cubic-bezier(.25,.46,.45,.94) .08s forwards;
             }
 
             /* טקסט על מסך הבחירה */
