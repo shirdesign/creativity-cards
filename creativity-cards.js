@@ -557,8 +557,8 @@ class CreativityCardsGame {
                 <div class="ccg-card-visual-wrapper">
                     ${cardImg}
                     <div class="ccg-card-overlay" dir="rtl">
-                        ${card.title ? `<h2 class="ccg-card-title">${card.title}</h2>` : ''}
-                        <div class="ccg-card-prompt">${card.prompt}</div>
+                        ${card.title ? `<h2 class="ccg-card-title">${this.escapeHtml(card.title)}</h2>` : ''}
+                        <div class="ccg-card-prompt">${this.escapeHtml(card.prompt)}</div>
                     </div>
                 </div>
 
@@ -591,7 +591,7 @@ class CreativityCardsGame {
 
         this.container.querySelector('[data-action="followup"]')?.addEventListener('click', () => {
             if (card.follow_up) {
-                followUpBox.textContent = card.follow_up;
+                followUpBox.innerHTML = this.escapeHtml(card.follow_up);
                 followUpBox.classList.add('active');
             } else {
                 this.showStatus('לקלף הזה אין עזרה נוספת — נסי קלף חדש!', 'warning');
@@ -599,7 +599,7 @@ class CreativityCardsGame {
         });
 
         this.container.querySelector('[data-action="encouragement"]')?.addEventListener('click', () => {
-            encouragementBox.textContent = encouragement;
+            encouragementBox.innerHTML = this.escapeHtml(encouragement);
             encouragementBox.classList.add('active');
         });
 
@@ -777,24 +777,62 @@ class CreativityCardsGame {
         throw new Error(`Google Sheet load failed: ${lastErr?.message}`);
     }
 
+    // ── CSV parser מלא — מטפל בתאים מרובי-שורות בתוך מרכאות ──────────────────
     parseCsv(text) {
-        const lines = text.split(/\r?\n/).filter(Boolean);
-        if (lines.length < 2) return { headers: [], rows: [] };
+        const rows = [];
+        let row = [], cur = '', inQ = false, i = 0;
+
+        while (i < text.length) {
+            const c = text[i];
+
+            if (inQ) {
+                if (c === '"' && text[i + 1] === '"') {
+                    // מרכאה מוכפלת בתוך שדה מוקף — ממירה למרכאה אחת
+                    cur += '"'; i += 2;
+                } else if (c === '"') {
+                    // סיום שדה מוקף
+                    inQ = false; i++;
+                } else {
+                    // כל תו — כולל \n ו-\r בתוך שדה מוקף — נשמר כחלק מהערך
+                    cur += c; i++;
+                }
+            } else {
+                if (c === '"') {
+                    inQ = true; i++;
+                } else if (c === ',') {
+                    row.push(cur.trim()); cur = ''; i++;
+                } else if (c === '\r' && text[i + 1] === '\n') {
+                    row.push(cur.trim()); rows.push(row); row = []; cur = ''; i += 2;
+                } else if (c === '\n') {
+                    row.push(cur.trim()); rows.push(row); row = []; cur = ''; i++;
+                } else {
+                    cur += c; i++;
+                }
+            }
+        }
+        // שורה אחרונה ללא ירידת שורה בסוף
+        if (cur || row.length) { row.push(cur.trim()); rows.push(row); }
+
+        // מסנן שורות ריקות לגמרי
+        const nonEmpty = rows.filter(r => r.some(v => v));
+        if (nonEmpty.length < 2) return { headers: [], rows: [] };
         return {
-            headers: this.parseCsvLine(lines[0]).map(h => h.trim().toLowerCase()),
-            rows:    lines.slice(1).map(l => this.parseCsvLine(l))
+            headers: nonEmpty[0].map(h => h.trim().toLowerCase()),
+            rows:    nonEmpty.slice(1)
         };
     }
-    parseCsvLine(line) {
-        const r = []; let cur = '', inQ = false;
-        for (let i = 0; i < line.length; i++) {
-            const c = line[i];
-            if (c === '"') { if (inQ && line[i+1] === '"') { cur += '"'; i++; } else inQ = !inQ; }
-            else if (c === ',' && !inQ) { r.push(cur.trim()); cur = ''; }
-            else cur += c;
-        }
-        r.push(cur.trim()); return r;
+    // ── עזרי תצוגה ──────────────────────────────────────────────────────────
+    // מנקה תווי HTML מסוכנים + ממיר ירידות שורה ל-<br> להצגה נכונה
+    escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/\r\n|\r|\n/g, '<br>');
     }
+
     mapRowToCard(vals, hdrs) {
         if (!vals || !hdrs) return null;
         const get = (...keys) => { for (const k of keys) { const i = hdrs.indexOf(k); if (i !== -1 && vals[i]?.trim()) return vals[i].trim(); } return ''; };
