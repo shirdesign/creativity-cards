@@ -220,13 +220,14 @@ class CreativityCardsGame {
                 filter: drop-shadow(0 10px 32px rgba(0,0,0,.22));
                 display: flex;
                 flex-direction: column;
-                /* אין aspect-ratio קשיח — הקלף גדל עם התוכן, הרקע נמתח איתו */
+                /* background נמתח ביחס לגודל ה-wrapper */
             }
-            /* overlay גדל עם התוכן — ללא flex:1 קשיח */
+            /* overlay: טקסט למעלה, כפתורים 50px מתחת לטקסט */
             ${s} .ccg-card-overlay {
                 display: flex;
                 flex-direction: column;
-                justify-content: space-between;
+                justify-content: flex-start;
+                gap: 50px;
                 /* padding מפנה מהסלוטייפ למעלה ומהשוליים הקרועים מהצדדים */
                 padding: 22% 10% 10%;
             }
