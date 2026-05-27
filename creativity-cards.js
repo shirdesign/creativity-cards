@@ -588,6 +588,9 @@ class CreativityCardsGame {
                 ${s} .ccg-card-bottom-row { flex-direction: column; align-items: center; gap: 6px; }
                 ${s} .ccg-btn-new { width: 100%; justify-content: center; }
                 ${s} .ccg-share-button { align-self: center; max-width: 100%; }
+                /* כפתורי פעולה פנימיים — אחד מתחת לשני במובייל */
+                ${s} .ccg-inner-actions { flex-direction: column; align-items: center; }
+                ${s} .ccg-inner-btn { width: min(234px, 80vw); }
             }
         `;
         document.head.appendChild(style);
