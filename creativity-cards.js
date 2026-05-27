@@ -85,6 +85,16 @@ class CreativityCardsGame {
         const style = document.createElement('style');
         style.id    = this.styleId;
         style.textContent = `
+            /* ── כתב יד — OHEyalMeirBerkowitz ──────────────────────────── */
+            @font-face {
+                font-family: 'OHEyalMeirBerkowitz';
+                src: url('${a}OHEyalMeirBerkowitz-Regular.woff2') format('woff2'),
+                     url('${a}OHEyalMeirBerkowitz-Regular.woff')  format('woff');
+                font-weight: normal;
+                font-style: normal;
+                font-display: swap;
+            }
+
             /* ── base ─────────────────────────────────────────────────── */
             ${s} .ccg {
                 font-family: '${ff}', 'Assistant', 'Rubik', 'Arial', sans-serif;
@@ -93,7 +103,7 @@ class CreativityCardsGame {
                 box-sizing: border-box;
             }
             ${s} .ccg *, ${s} .ccg *::before, ${s} .ccg *::after { box-sizing: inherit; }
-            ${s} .ccg button { font-family: inherit; }
+            ${s} .ccg button { font-family: '${ff}', 'Assistant', 'Rubik', 'Arial', sans-serif; }
 
             /* ── all screens share bg-main ─────────────────────────────── */
             ${s} .ccg-start-screen,
@@ -248,15 +258,17 @@ class CreativityCardsGame {
                 padding: 2px 4px;
             }
             ${s} .ccg-card-title {
-                font-size: clamp(14px,2vw,18px);
-                font-weight: 800;
+                font-family: 'OHEyalMeirBerkowitz', 'Heebo', sans-serif;
+                font-size: clamp(16px,2.4vw,21px);
+                font-weight: normal;
                 color: ${ctc};
-                margin: 0 0 4px;
-                line-height: 1.3;
+                margin: 0 0 6px;
+                line-height: 1.4;
             }
             ${s} .ccg-card-prompt {
-                font-size: clamp(13px,1.8vw,16px);
-                line-height: 1.8;
+                font-family: 'OHEyalMeirBerkowitz', 'Heebo', sans-serif;
+                font-size: clamp(15px,2.2vw,19px);
+                line-height: 1.9;
                 color: ${ctc};
                 margin: 0;
             }
