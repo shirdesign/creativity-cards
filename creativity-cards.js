@@ -516,24 +516,25 @@ class CreativityCardsGame {
 
             /* ── לוגו לקוחה ─────────────────────────────────────────────── */
             ${s} .ccg-logo-main {
-                width: min(130px, 28vw);
+                width: min(169px, 36vw);
                 height: auto;
                 display: block;
                 margin: 0 auto 4px;
                 flex-shrink: 0;
             }
             ${s} .ccg-logo-small {
-                width: min(80px, 18vw);
+                width: min(104px, 23vw);
                 height: auto;
                 display: block;
                 opacity: .88;
                 flex-shrink: 0;
             }
-            /* בעמוד הקלף: לוגו גדול פי 2, ימינה ב-absolute — הקלף עולה עד למעלה */
+            /* בעמוד הקלף: לוגו גדול, ימינה ב-absolute — צמוד לשוליים הימניים של הקלף */
             ${s} .ccg-card-open .ccg-logo-small {
                 position: absolute;
                 top: 14px;
-                right: 16px;
+                /* מיישר את שולי הלוגו עם השוליים הימניים של הקלף (לא עם שפת המסך) */
+                right: calc((100% - min(520px, 92vw)) / 2);
                 width: min(160px, 32vw);
                 margin: 0;
                 opacity: .92;
