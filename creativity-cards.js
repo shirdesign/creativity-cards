@@ -115,15 +115,15 @@ class CreativityCardsGame {
                 flex-direction: column;
                 position: relative;
             }
-            /* מסך פתיחה + בחירת קלף = רקע ראשי */
+            /* מסך פתיחה + בחירת קלף = תמונה עם הקפה (bg-inner) */
             ${s} .ccg-start-screen,
             ${s} .ccg-selection,
             ${s} .ccg-empty-state {
-                background: ${a ? `url('${a}bg-main.png') center center / cover no-repeat` : '#FFF5E0'};
+                background: ${a ? `url('${a}bg-inner.png') center center / cover no-repeat` : '#FFF5E0'};
             }
-            /* מסך קלף פתוח = רקע פנימי */
+            /* מסך קלף פתוח = תמונה עם העיפרון (bg-main) */
             ${s} .ccg-card-open {
-                background: ${a ? `url('${a}bg-inner.png') center center / cover no-repeat` : '#FDF6EC'};
+                background: ${a ? `url('${a}bg-main.png') center center / cover no-repeat` : '#FDF6EC'};
             }
 
             /* ── מסך פתיחה ─────────────────────────────────────────────── */
