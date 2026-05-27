@@ -220,19 +220,18 @@ class CreativityCardsGame {
                 filter: drop-shadow(0 10px 32px rgba(0,0,0,.22));
                 display: flex;
                 flex-direction: column;
-                overflow: hidden;
+                /* אין aspect-ratio קשיח — הקלף גדל עם התוכן, הרקע נמתח איתו */
             }
-            /* overlay כ-flex child — ללא position:absolute, ללא z-index */
+            /* overlay גדל עם התוכן — ללא flex:1 קשיח */
             ${s} .ccg-card-overlay {
-                flex: 1;
-                min-height: 0;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
                 /* padding מפנה מהסלוטייפ למעלה ומהשוליים הקרועים מהצדדים */
                 padding: 22% 10% 10%;
             }
-            ${s} .ccg-card-text { flex: 1; overflow-y: auto; scrollbar-width: thin; padding-bottom: 6px; }
+            /* כל הטקסט מוצג — ללא סקרול */
+            ${s} .ccg-card-text { padding-bottom: 6px; }
             ${s} .ccg-card-title {
                 font-family: 'OHEyalMeirBerkowitz', 'Heebo', sans-serif;
                 font-size: clamp(19px, 3vw, 25px);
@@ -559,9 +558,12 @@ class CreativityCardsGame {
             /* ── מובייל ─────────────────────────────────────────────────── */
             @media (max-width: 480px) {
                 ${s} .ccg-card-open { padding: 140px 8px 8px; gap: 8px; }
-                ${s} .ccg-card-visual-wrapper { width: min(310px, 90vw, calc(56vh * 751 / 923)); }
+                ${s} .ccg-card-visual-wrapper { width: min(310px, 90vw); }
                 ${s} .ccg-card-open .ccg-logo-small { width: min(120px, 28vw); top: 8px; right: 10px; }
                 ${s} .ccg-inner-btn { width: min(145px, 42vw); }
+                /* גופן קטן יותר במובייל כדי שהקלף לא יתארך יותר מדי */
+                ${s} .ccg-card-title  { font-size: clamp(15px, 4vw, 19px); }
+                ${s} .ccg-card-prompt { font-size: clamp(14px, 3.8vw, 17px); }
                 ${s} .ccg-card-bottom-row { flex-direction: column; align-items: center; gap: 6px; }
                 ${s} .ccg-btn-new { width: 100%; justify-content: center; }
                 ${s} .ccg-share-button { align-self: center; max-width: 100%; }
