@@ -194,21 +194,22 @@ class CreativityCardsGame {
             ${s} .ccg-card-open {
                 align-items: center;
                 justify-content: center;
-                padding: clamp(12px,2vw,28px) clamp(10px,2vw,24px);
-                gap: 20px;
+                padding: clamp(8px,1.5vw,20px) clamp(8px,1.5vw,20px);
+                gap: 10px;
             }
 
-            /* קלף — ממלא עד 90% גובה הוויויפורט, שומר על יחס תמונה */
+            /* קלף: position:relative כך שה-overlay יוכל לשבת עליו ב-absolute */
             ${s} .ccg-card-visual-wrapper {
-                display: grid;
-                grid-template-areas: "card";
-                /* רוחב = מינימום בין 600px, 92vw, והרוחב שגורם לגובה ≤88vh */
-                width: min(600px, 92vw, calc(88vh * 1306 / 1796));
+                position: relative;
+                /* גובה מקסימלי 68vh — משאיר מקום לכפתורים מתחת */
+                width: min(540px, 92vw, calc(68vh * 1306 / 1796));
                 aspect-ratio: 1306 / 1796;
                 animation: ccgCardIn .45s cubic-bezier(.215,.61,.355,1);
+                flex-shrink: 0;
             }
             ${s} .ccg-card-img {
-                grid-area: card;
+                position: absolute;
+                inset: 0;
                 width: 100%;
                 height: 100%;
                 object-fit: contain;
@@ -217,10 +218,10 @@ class CreativityCardsGame {
                 pointer-events: none;
                 filter: drop-shadow(0 10px 32px rgba(0,0,0,.22));
             }
-            /* טקסט מעל התמונה — z-index מפורש מכניע את stacking-context של filter */
+            /* overlay מכסה את כל שטח הקלף בדיוק, מעל התמונה */
             ${s} .ccg-card-overlay {
-                grid-area: card;
-                position: relative;
+                position: absolute;
+                inset: 0;
                 z-index: 2;
                 display: flex;
                 flex-direction: column;
@@ -259,20 +260,21 @@ class CreativityCardsGame {
                 background: transparent;
                 padding: 0;
                 cursor: pointer;
-                width: min(130px, 30vw);
+                width: min(155px, 40vw);
                 transition: transform .15s ease, filter .15s ease;
             }
             ${s} .ccg-inner-btn img { grid-area: 1/1; width: 100%; height: auto; display: block; }
             ${s} .ccg-inner-btn span {
                 grid-area: 1/1;
                 font-family: '${ff}', sans-serif;
-                font-size: clamp(10px, 1.4vw, 12px);
+                font-size: clamp(11px, 1.6vw, 13px);
                 font-weight: 700;
                 color: #1a1a1a;
                 z-index: 1;
                 pointer-events: none;
                 text-align: center;
-                padding: 0 6px;
+                padding: 0 10px;
+                line-height: 1.25;
             }
             ${s} .ccg-inner-btn:hover  { transform: translate(-2px,-2px); filter: drop-shadow(3px 3px 0 rgba(0,0,0,.3)); }
             ${s} .ccg-inner-btn:active { transform: translate(1px,1px);   filter: drop-shadow(1px 1px 0 rgba(0,0,0,.25)); }
@@ -502,9 +504,12 @@ class CreativityCardsGame {
 
             /* ── מובייל ─────────────────────────────────────────────────── */
             @media (max-width: 480px) {
-                ${s} .ccg-inner-actions { flex-direction: column; align-items: center; }
-                ${s} .ccg-inner-btn { width: min(200px, 60vw); }
-                ${s} .ccg-card-bottom-row { flex-direction: column; align-items: center; }
+                ${s} .ccg-card-open { padding: 6px 8px; gap: 8px; }
+                /* קלף קצת יותר נמוך במובייל — עוד מקום לכפתורים */
+                ${s} .ccg-card-visual-wrapper { width: min(320px, 90vw, calc(58vh * 1306 / 1796)); }
+                /* כפתורי הפנים נשארים זה לצד זה במובייל */
+                ${s} .ccg-inner-btn { width: min(145px, 42vw); }
+                ${s} .ccg-card-bottom-row { flex-direction: column; align-items: center; gap: 6px; }
                 ${s} .ccg-btn-new { width: 100%; justify-content: center; }
                 ${s} .ccg-share-button { align-self: center; max-width: 100%; }
             }
