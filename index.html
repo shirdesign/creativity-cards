@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קלפי יצירתיות</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Heebo', 'Arial', sans-serif;
+            direction: rtl;
+            background: #F5ECD7;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+        }
+
+        #creativity-cards-game {
+            width: 100%;
+            max-width: 760px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="creativity-cards-game"></div>
+
+    <!-- config — ערכו כאן את כל ההגדרות -->
+    <script src="config.js"></script>
+
+    <!-- הגיים -->
+    <script src="creativity-cards.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.getElementById('creativity-cards-game');
+            new CreativityCardsGame(container, window.CREATIVITY_CARDS_CONFIG || {});
+        });
+    </script>
+
+</body>
+</html>
