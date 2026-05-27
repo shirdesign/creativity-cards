@@ -101,9 +101,7 @@ class CreativityCardsGame {
             ${s} .ccg-selection,
             ${s} .ccg-card-open,
             ${s} .ccg-empty-state {
-                min-height: 480px;
-                border-radius: 24px;
-                overflow: hidden;
+                min-height: 100dvh;
                 display: flex;
                 flex-direction: column;
                 position: relative;
@@ -113,24 +111,25 @@ class CreativityCardsGame {
             ${s} .ccg-start-screen {
                 background: ${a ? `url('${a}bg-main.png') center center / cover no-repeat` : '#FFF5E0'};
                 align-items: center;
-                justify-content: flex-end;
-                padding-bottom: clamp(32px, 5vw, 56px);
+                justify-content: center;
             }
             ${s} .ccg-start-overlay {
                 background: rgba(255,255,255,0.88);
                 backdrop-filter: blur(4px);
                 border-radius: 20px;
-                padding: clamp(24px,3vw,40px) clamp(20px,4vw,48px);
-                margin: 0 clamp(16px,4vw,40px);
+                padding: clamp(24px,3vw,40px) clamp(20px,4vw,56px);
+                margin: clamp(16px,4vw,40px);
                 text-align: center;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 gap: 16px;
-                box-shadow: 0 8px 32px rgba(0,0,0,.12);
+                box-shadow: 0 8px 40px rgba(0,0,0,.15);
+                max-width: 640px;
+                width: 100%;
             }
             ${s} .ccg-start-heading {
-                font-size: clamp(26px,4vw,40px);
+                font-size: clamp(28px,4vw,46px);
                 font-weight: 800;
                 color: ${ctc};
                 margin: 0;
@@ -151,6 +150,15 @@ class CreativityCardsGame {
                 background: ${a ? `url('${a}bg-inner.png') center center / cover no-repeat` : '#FDF6EC'};
                 padding: clamp(20px,3vw,40px);
                 gap: 20px;
+            }
+
+            /* תוכן פנימי ממורכז ורחב מקסימום */
+            ${s} .ccg-selection > *,
+            ${s} .ccg-card-open > * {
+                max-width: 760px;
+                width: 100%;
+                margin-left: auto;
+                margin-right: auto;
             }
 
             /* ── כפתורים ────────────────────────────────────────────────── */
