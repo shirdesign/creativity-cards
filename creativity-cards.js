@@ -212,7 +212,7 @@ class CreativityCardsGame {
              * aspect-ratio מותאם לממדי תוכן הנייר בפועל (751×923 px).
              */
             ${s} .ccg-card-visual-wrapper {
-                width: min(520px, 92vw, calc(66vh * 751 / 923));
+                width: min(676px, 92vw);
                 aspect-ratio: 751 / 923;
                 animation: ccgCardIn .45s cubic-bezier(.215,.61,.355,1);
                 flex-shrink: 0;
@@ -254,7 +254,7 @@ class CreativityCardsGame {
                 gap: 8px;
                 justify-content: center;
                 flex-shrink: 0;
-                flex-wrap: wrap;
+                flex-wrap: nowrap;
             }
             ${s} .ccg-inner-btn {
                 display: grid;
@@ -263,7 +263,8 @@ class CreativityCardsGame {
                 background: transparent;
                 padding: 0;
                 cursor: pointer;
-                width: min(234px, 55vw);
+                /* תמיד אחד ליד השני: בדיוק חצי מרוחב הקונטיינר פחות חצי ה-gap */
+                width: min(234px, calc(50% - 4px));
                 transition: transform .15s ease, filter .15s ease;
             }
             ${s} .ccg-inner-btn img { grid-area: 1/1; width: 100%; height: auto; display: block; }
@@ -565,7 +566,6 @@ class CreativityCardsGame {
                 ${s} .ccg-card-open { padding: 140px 8px 8px; gap: 8px; }
                 ${s} .ccg-card-visual-wrapper { width: min(310px, 90vw); }
                 ${s} .ccg-card-open .ccg-logo-small { width: min(120px, 28vw); top: 8px; right: 10px; }
-                ${s} .ccg-inner-btn { width: min(145px, 42vw); }
                 /* גופן קטן יותר במובייל כדי שהקלף לא יתארך יותר מדי */
                 ${s} .ccg-card-title  { font-size: clamp(15px, 4vw, 19px); }
                 ${s} .ccg-card-prompt { font-size: clamp(14px, 3.8vw, 17px); }
