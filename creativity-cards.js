@@ -419,9 +419,18 @@ class CreativityCardsGame {
                 filter: drop-shadow(0 6px 18px rgba(0,0,0,.25));
                 transition: filter .15s ease;
             }
-            ${s} .ccg-deck-c3 { transform: rotate(-8deg)  translate(-7px, 9px);  z-index: 1; }
-            ${s} .ccg-deck-c2 { transform: rotate(-3deg)  translate(-2px, 3px);  z-index: 2; }
-            ${s} .ccg-deck-c1 { transform: rotate( 3deg);                        z-index: 3; }
+            /* 11 קלפים בערימה — מ-c11 (תחתון) עד c1 (עליון) */
+            ${s} .ccg-deck-c11 { transform: rotate(-13deg) translate(-12px, 14px); z-index: 1;  }
+            ${s} .ccg-deck-c10 { transform: rotate(-12.5deg) translate(-11.5px,13.5px); z-index: 2; }
+            ${s} .ccg-deck-c9  { transform: rotate(-12deg) translate(-11px, 13px); z-index: 3;  }
+            ${s} .ccg-deck-c8  { transform: rotate(-11.5deg) translate(-10.5px,12.5px); z-index: 4; }
+            ${s} .ccg-deck-c7  { transform: rotate(-11deg) translate(-10px, 12px); z-index: 5;  }
+            ${s} .ccg-deck-c6  { transform: rotate(-10.5deg) translate(-9.5px,11.5px); z-index: 6; }
+            ${s} .ccg-deck-c5  { transform: rotate(-10deg) translate(-9px,  11px);  z-index: 7;  }
+            ${s} .ccg-deck-c4  { transform: rotate(-9deg)  translate(-8px,  10px);  z-index: 8;  }
+            ${s} .ccg-deck-c3  { transform: rotate(-8deg)  translate(-7px,  9px);   z-index: 9;  }
+            ${s} .ccg-deck-c2  { transform: rotate(-3deg)  translate(-2px,  3px);   z-index: 10; }
+            ${s} .ccg-deck-c1  { transform: rotate( 3deg);                          z-index: 11; }
             ${s} .ccg-deck-wrap:hover .ccg-deck-c1 { filter: drop-shadow(0 10px 26px rgba(0,0,0,.35)); }
 
             /*
@@ -530,16 +539,23 @@ class CreativityCardsGame {
                 opacity: .88;
                 flex-shrink: 0;
             }
-            /* בעמוד הקלף: לוגו גדול, ימינה ב-absolute — צמוד לשוליים הימניים של הקלף */
+            /* בעמוד הקלף: לוגו גדול, ב-absolute */
             ${s} .ccg-card-open .ccg-logo-small {
                 position: absolute;
                 top: 14px;
-                /* מיישר את שולי הלוגו עם השוליים הימניים של הקלף (לא עם שפת המסך) */
-                right: calc((100% - min(520px, 92vw)) / 2);
+                /* ברירת מחדל: חופף פינת הקלף הימנית-עליונה */
+                right: calc((100% - min(676px, 92vw)) / 2);
                 width: min(160px, 32vw);
                 margin: 0;
                 opacity: .92;
                 z-index: 5;
+            }
+            /* דסקטופ רחב ≥1100px: מקום פנוי → לוגו מחוץ לקלף, 8px מימינו */
+            @media (min-width: 1100px) {
+                ${s} .ccg-card-open .ccg-logo-small {
+                    right: auto;
+                    left: calc(50% + 346px);
+                }
             }
 
             /* ── קרדיט תחתון ────────────────────────────────────────────── */
@@ -633,9 +649,17 @@ class CreativityCardsGame {
                 ${this.logoHtml('ccg-logo-small')}
                 <!-- ערמת קלפים — לחיצה או כפתור מפעילים את הערבוב -->
                 <div class="ccg-deck-wrap ccg-pick-target" role="button" aria-label="${btnLabel}" tabindex="0">
-                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c3" alt="" loading="lazy">
-                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c2" alt="" loading="lazy">
-                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c1" alt="ערמת קלפים" loading="lazy">
+                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c11" alt="" loading="lazy">
+                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c10" alt="" loading="lazy">
+                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c9"  alt="" loading="lazy">
+                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c8"  alt="" loading="lazy">
+                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c7"  alt="" loading="lazy">
+                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c6"  alt="" loading="lazy">
+                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c5"  alt="" loading="lazy">
+                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c4"  alt="" loading="lazy">
+                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c3"  alt="" loading="lazy">
+                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c2"  alt="" loading="lazy">
+                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c1"  alt="ערמת קלפים" loading="lazy">
                 </div>
                 <button type="button" class="ccg-btn-enter ccg-pick-btn">
                     <img src="${a}btn-enter.png" alt="${btnLabel}" loading="lazy">
