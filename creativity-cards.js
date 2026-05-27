@@ -209,11 +209,10 @@ class CreativityCardsGame {
              * קלף: background-image עם זום מדויק על אזור הנייר בלבד.
              * ה-PNG של הקלף (1306×1796) מכיל ~23% שקיפות למעלה, ~26% למטה,
              * ו-~22% לכל צד. מגדילים ל-174%×195% כדי שרק הנייר ימלא את ה-wrapper.
-             * aspect-ratio מותאם לממדי תוכן הנייר בפועל (751×923 px).
+             * הקלף גדל עם התוכן — אין aspect-ratio קשיח.
              */
             ${s} .ccg-card-visual-wrapper {
                 width: min(676px, 92vw);
-                aspect-ratio: 751 / 923;
                 animation: ccgCardIn .45s cubic-bezier(.215,.61,.355,1);
                 flex-shrink: 0;
                 background: url('${a}card-front-straight.png') 51% 47% / 174% 195% no-repeat;
