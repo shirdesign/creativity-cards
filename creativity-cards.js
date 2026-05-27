@@ -591,6 +591,8 @@ class CreativityCardsGame {
                 /* כפתורי פעולה פנימיים — אחד מתחת לשני במובייל */
                 ${s} .ccg-inner-actions { flex-direction: column; align-items: center; }
                 ${s} .ccg-inner-btn { width: min(234px, 80vw); }
+                /* padding-top גדול יותר במובייל: 22% מ-310px = 68px, לא מספיק לסלוטייפ */
+                ${s} .ccg-card-overlay { padding-top: 30%; }
             }
         `;
         document.head.appendChild(style);
