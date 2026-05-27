@@ -151,14 +151,14 @@ class CreativityCardsGame {
                 width: 100%;
             }
             ${s} .ccg-start-heading {
-                font-size: clamp(28px,4vw,46px);
+                font-size: clamp(24px,3.4vw,39px);
                 font-weight: 800;
                 color: ${ctc};
                 margin: 0;
                 line-height: 1.2;
             }
             ${s} .ccg-start-subtitle {
-                font-size: clamp(15px,2vw,20px);
+                font-size: clamp(13px,1.7vw,17px);
                 margin: 0;
                 color: #555;
                 line-height: 1.7;
@@ -185,7 +185,7 @@ class CreativityCardsGame {
             ${s} .ccg-btn-enter span {
                 grid-area: 1/1;
                 font-family: '${ff}', sans-serif;
-                font-size: clamp(18px,3vw,26px);
+                font-size: clamp(15px,2.5vw,22px);
                 font-weight: 800;
                 color: #1a1a1a;
                 z-index: 1;
@@ -199,31 +199,38 @@ class CreativityCardsGame {
             /* ── מסך קלף פתוח ───────────────────────────────────────────── */
             ${s} .ccg-card-open {
                 align-items: center;
-                justify-content: center;
-                padding: clamp(8px,1.5vw,20px) clamp(8px,1.5vw,20px);
+                justify-content: flex-start;
+                padding: clamp(8px,1.5vw,16px) clamp(8px,1.5vw,20px);
                 gap: 10px;
+                overflow-y: auto;
             }
 
-            /* קלף: background-image — ללא position:absolute, ללא z-index */
+            /*
+             * קלף: background-image עם זום מדויק על אזור הנייר בלבד.
+             * ה-PNG של הקלף (1306×1796) מכיל ~23% שקיפות למעלה, ~26% למטה,
+             * ו-~22% לכל צד. מגדילים ל-174%×195% כדי שרק הנייר ימלא את ה-wrapper.
+             * aspect-ratio מותאם לממדי תוכן הנייר בפועל (751×923 px).
+             */
             ${s} .ccg-card-visual-wrapper {
-                /* גובה מקסימלי 68vh — משאיר מקום לכפתורים מתחת */
-                width: min(540px, 92vw, calc(68vh * 1306 / 1796));
-                aspect-ratio: 1306 / 1796;
+                width: min(520px, 92vw, calc(66vh * 751 / 923));
+                aspect-ratio: 751 / 923;
                 animation: ccgCardIn .45s cubic-bezier(.215,.61,.355,1);
                 flex-shrink: 0;
-                /* תמונת הקלף כ-background — ללא <img> + position:absolute */
-                background: url('${a}card-front-straight.png') center / contain no-repeat;
+                background: url('${a}card-front-straight.png') 51% 47% / 174% 195% no-repeat;
                 filter: drop-shadow(0 10px 32px rgba(0,0,0,.22));
                 display: flex;
                 flex-direction: column;
+                overflow: hidden;
             }
             /* overlay כ-flex child — ללא position:absolute, ללא z-index */
             ${s} .ccg-card-overlay {
                 flex: 1;
+                min-height: 0;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
-                padding: 13% 11% 11%;
+                /* padding מפנה מהסלוטייפ למעלה ומהשוליים הקרועים מהצדדים */
+                padding: 14% 10% 10%;
             }
             ${s} .ccg-card-text { flex: 1; overflow-y: auto; scrollbar-width: thin; padding-bottom: 6px; }
             ${s} .ccg-card-title {
@@ -257,7 +264,7 @@ class CreativityCardsGame {
                 background: transparent;
                 padding: 0;
                 cursor: pointer;
-                width: min(155px, 40vw);
+                width: min(195px, 46vw);
                 transition: transform .15s ease, filter .15s ease;
             }
             ${s} .ccg-inner-btn img { grid-area: 1/1; width: 100%; height: auto; display: block; }
@@ -520,6 +527,16 @@ class CreativityCardsGame {
                 opacity: .88;
                 flex-shrink: 0;
             }
+            /* בעמוד הקלף: לוגו גדול פי 2, ימינה ב-absolute — הקלף עולה עד למעלה */
+            ${s} .ccg-card-open .ccg-logo-small {
+                position: absolute;
+                top: 14px;
+                right: 16px;
+                width: min(160px, 32vw);
+                margin: 0;
+                opacity: .92;
+                z-index: 5;
+            }
 
             /* ── קרדיט תחתון ────────────────────────────────────────────── */
             ${s} .ccg-credit {
@@ -542,9 +559,8 @@ class CreativityCardsGame {
             /* ── מובייל ─────────────────────────────────────────────────── */
             @media (max-width: 480px) {
                 ${s} .ccg-card-open { padding: 6px 8px; gap: 8px; }
-                /* קלף קצת יותר נמוך במובייל — עוד מקום לכפתורים */
-                ${s} .ccg-card-visual-wrapper { width: min(320px, 90vw, calc(58vh * 1306 / 1796)); }
-                /* כפתורי הפנים נשארים זה לצד זה במובייל */
+                ${s} .ccg-card-visual-wrapper { width: min(310px, 90vw, calc(56vh * 751 / 923)); }
+                ${s} .ccg-card-open .ccg-logo-small { width: min(120px, 28vw); top: 8px; right: 10px; }
                 ${s} .ccg-inner-btn { width: min(145px, 42vw); }
                 ${s} .ccg-card-bottom-row { flex-direction: column; align-items: center; gap: 6px; }
                 ${s} .ccg-btn-new { width: 100%; justify-content: center; }
@@ -599,6 +615,8 @@ class CreativityCardsGame {
 
     renderCardSelection() {
         if (!this.state.deck.length) { this.renderDeckEmpty(); return; }
+        // מנקה את ה-hash כשחוזרים למסך הבחירה
+        try { if (history.replaceState) history.replaceState(null, '', window.location.pathname + window.location.search); } catch {}
 
         const a        = this.config.assets_url;
         const btnLabel = this.config.select_button_label;
@@ -661,6 +679,12 @@ class CreativityCardsGame {
     }
 
     renderCard(card) {
+        // מעדכן את ה-URL ל-hash ייחודי לקלף הזה — לשיתוף ישיר
+        try {
+            if (card.title && history.replaceState)
+                history.replaceState(null, '', '#card=' + encodeURIComponent(card.title));
+        } catch {}
+
         const remaining     = this.state.deck.length;
         const encouragement = card.encouragement || this.config.encouragement_default;
         const newBtnLabel   = remaining ? this.config.new_card_button_label : 'ערבוב מחדש 🔀';
@@ -781,32 +805,36 @@ class CreativityCardsGame {
     }
 
     async shareCard(card) {
-        const text = (card.share_text?.trim() || card.prompt || '').trim();
-        // במובייל — שיתוף native (ווטסאפ, אינסטגרם וכו')
-        // בדסקטופ — תמיד העתק ללוח (navigator.share פותח בדסקטופ חלון ריק)
+        // מה שמשתף: הלינק הישיר לקלף הזה (ה-URL הנוכחי כולל hash)
+        const cardUrl  = window.location.href;
+        const shareMsg = card.share_text?.trim() || '';
         const isMobile = navigator.maxTouchPoints > 1 || /Mobi|Android/i.test(navigator.userAgent);
         try {
             if (isMobile && navigator.share) {
-                await navigator.share({ text });
+                // מובייל — שיתוף native עם הלינק ועם ה-share_text כטקסט נלווה
+                await navigator.share({
+                    title: card.title || 'קלף יצירתיות',
+                    text:  shareMsg,
+                    url:   cardUrl
+                });
             } else if (navigator.clipboard?.writeText) {
-                await navigator.clipboard.writeText(text);
-                this.showStatus('✅ הטקסט הועתק! הדביקי בוואטסאפ, אינסטגרם, או כל מקום.', 'success');
+                // דסקטופ — מעתיק את הלינק ללוח
+                await navigator.clipboard.writeText(cardUrl);
+                this.showStatus('✅ הלינק הועתק! שלחי לחבר/ה כדי שיראו את הקלף שלך.', 'success');
             } else {
-                // fallback עתיק — prompt לעתים
-                window.prompt('העתיקי את הטקסט (Ctrl+C / Cmd+C):', text);
+                window.prompt('העתיקי את הלינק לקלף:', cardUrl);
             }
         } catch (err) {
             if (err?.name !== 'AbortError') {
-                // clipboard נכשל? ננסה שוב בשיטה ישנה
                 try {
                     const ta = document.createElement('textarea');
-                    ta.value = text;
+                    ta.value = cardUrl;
                     ta.style.cssText = 'position:fixed;opacity:0';
                     document.body.appendChild(ta);
                     ta.select();
                     document.execCommand('copy');
                     document.body.removeChild(ta);
-                    this.showStatus('✅ הועתק! הדביקי בוואטסאפ או כל מקום.', 'success');
+                    this.showStatus('✅ הלינק הועתק! שלחי לחבר/ה כדי שיראו את הקלף שלך.', 'success');
                 } catch {
                     this.showStatus('לא הצלחנו לשתף כרגע — נסי שוב.', 'warning');
                 }
@@ -844,7 +872,8 @@ class CreativityCardsGame {
 
             this.state.allCards = cards;
             this.resetDeck();
-            this.renderStartScreen();
+            // אם ה-URL מכיל hash של קלף ספציפי — מציגים אותו ישירות
+            if (!this._showHashCard()) this.renderStartScreen();
         } catch (err) {
             console.error('[CreativityCards]', err);
             this.showError(err.message?.includes('Google Sheet')
@@ -852,6 +881,24 @@ class CreativityCardsGame {
                    <p>ודאי שהגיליון פתוח לצפייה ציבורית (שיתוף → כל מי שיש לו קישור).</p>`
                 : 'לא הצלחנו לטעון קלפים. נסי לרענן את העמוד.');
         }
+    }
+
+    // ── ניווט ישיר לקלף לפי URL hash: #card=כותרת ──────────────────────────
+    _showHashCard() {
+        try {
+            const hash = window.location.hash;
+            if (!hash.startsWith('#card=')) return false;
+            const title = decodeURIComponent(hash.slice(6));
+            const card  = this.state.allCards.find(c => c.title === title);
+            if (!card) return false;
+            // מוציא מהחפיסה ומציג
+            const di = this.state.deck.findIndex(c => c.title === title);
+            if (di !== -1) this.state.deck.splice(di, 1);
+            this.state.usedCards.push(card);
+            this.state.currentCard = card;
+            this.renderCard(card);
+            return true;
+        } catch { return false; }
     }
 
     parseManualCards(raw) {
