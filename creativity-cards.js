@@ -230,32 +230,36 @@ class CreativityCardsGame {
             /* קלף — תמונה + שכבת טקסט */
             ${s} .ccg-card-visual-wrapper {
                 position: relative;
-                max-width: min(400px, 88vw);
+                max-width: min(380px, 86vw);
                 width: 100%;
+                /* aspect-ratio קבוע כך ש-wrapper תמיד בגובה נכון — גם לפני שהתמונה נטענת */
+                aspect-ratio: 1306 / 1796;
                 animation: ccgCardIn .45s cubic-bezier(.215,.61,.355,1);
+                filter: drop-shadow(0 6px 24px rgba(0,0,0,.18));
             }
             ${s} .ccg-card-img {
+                /* התמונה ממלאת את ה-wrapper בדיוק */
+                position: absolute;
+                inset: 0;
                 width: 100%;
-                height: auto;
+                height: 100%;
+                object-fit: contain;
                 display: block;
                 user-select: none;
                 pointer-events: none;
-                filter: drop-shadow(0 6px 24px rgba(0,0,0,.18));
             }
             /* שכבת הטקסט על פני הקלף */
             ${s} .ccg-card-overlay {
                 position: absolute;
-                top: 19%;
-                left: 9%;
-                right: 9%;
-                bottom: 7%;
+                inset: 0;
+                /* padding מכוון את הטקסט לאזור הנייר — מתחת לסלוטייפ ובתוך השוליים */
+                padding: 17% 12% 7% 10%;
                 display: flex;
                 flex-direction: column;
-                gap: 8px;
+                gap: 6px;
                 overflow-y: auto;
                 scrollbar-width: thin;
                 scrollbar-color: rgba(0,0,0,.2) transparent;
-                padding: 2px 4px;
             }
             ${s} .ccg-card-title {
                 font-family: 'OHEyalMeirBerkowitz', 'Heebo', sans-serif;
@@ -458,7 +462,7 @@ class CreativityCardsGame {
 
         const cardImg = this.config.assets_url
             ? `<img src="${this.config.assets_url}card-front-straight.png"
-                     alt="קלף יצירתיות" class="ccg-card-img" loading="lazy">`
+                     alt="קלף יצירתיות" class="ccg-card-img">`
             : '';
 
         this.container.innerHTML = `

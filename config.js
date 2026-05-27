@@ -26,7 +26,7 @@ window.CREATIVITY_CARDS_CONFIG = {
     shuffle_screen_text:        'מוכנים להיות יצירתיים? מתחו אצבעות, שנסו מותניים ולחצו על הכפתור.',
 
     followup_button_label:      'רוצה כיוון נוסף',
-    encouragement_button_label: 'אני הולכת לבצע את הקלף שלי עכשיו!',
+    encouragement_button_label: 'הולך לבצע',
     new_card_button_label:      'ערבב ושלוף לי קלף יצירתי',
     encouragement_default:      'איזה אומץ! לכי תנסי ונשמח לשמוע איך היה.',
 
