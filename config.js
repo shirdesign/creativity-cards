@@ -27,8 +27,8 @@ window.CREATIVITY_CARDS_CONFIG = {
     // כפתור שליפת קלף
     select_button_label: 'ערבב ושלוף לי קלף יצירתי',
 
-    // כפתור לקלף חדש (גם אחרי שרואים קלף)
-    new_card_button_label: 'ערבב ושלוף לי קלף יצירתי',
+    // כפתור לחזרה לחפיסה מתוך הקלף הפתוח
+    new_card_button_label: 'חזרה לחפיסה',
 
     // כפתור שמגלה את ה-follow_up של הקלף
     followup_button_label: 'עזרה יצירתית לביצוע הקלף',
