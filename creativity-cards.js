@@ -358,6 +358,16 @@ class CreativityCardsGame {
             }
             ${s} .ccg-followup-box     { border-right: 3px solid ${sc}; }
             ${s} .ccg-encouragement-box { border-right: 3px solid ${pc}; }
+            /* קישור בתיבת ה-followup — כל הטקסט קליקבילי */
+            ${s} .ccg-followup-box a {
+                color: ${sc};
+                text-decoration: underline;
+                text-underline-offset: 2px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: opacity .15s ease;
+            }
+            ${s} .ccg-followup-box a:hover { opacity: .78; }
             ${s} .ccg-followup-box.active,
             ${s} .ccg-encouragement-box.active { display: block; animation: ccgFadeIn .35s ease; }
 
@@ -1057,7 +1067,11 @@ class CreativityCardsGame {
 
         this.container.querySelector('[data-action="followup"]')?.addEventListener('click', () => {
             if (card.follow_up) {
-                followUpBox.innerHTML = this.escapeHtml(card.follow_up);
+                const safeText = this.escapeHtml(card.follow_up);
+                const link = card.followup_link;
+                followUpBox.innerHTML = link
+                    ? `<a href="${this.escapeHtml(link)}" target="_blank" rel="noopener noreferrer">${safeText}</a>`
+                    : safeText;
                 followUpBox.classList.add('active');
             } else {
                 this.showStatus('לקלף הזה אין עזרה נוספת — נסי קלף חדש!', 'warning');
@@ -1246,12 +1260,20 @@ class CreativityCardsGame {
         const prompt = (card.prompt || card.text || card.body || '').trim();
         if (!prompt) return null;
         return {
-            title:         (card.title || card.heading || `קלף ${index + 1}`).toString().trim(),
+            title:          (card.title || card.heading || `קלף ${index + 1}`).toString().trim(),
             prompt,
-            follow_up:     (card.follow_up || card.followup || '').trim(),
-            encouragement: (card.encouragement || '').trim(),
-            share_text:    (card.share_text || card.share || '').trim()
+            follow_up:      (card.follow_up || card.followup || '').trim(),
+            followup_link:  this.safeUrl(card.followup_link || card.follow_up_link || ''),
+            encouragement:  (card.encouragement || '').trim(),
+            share_text:     (card.share_text || card.share || '').trim()
         };
+    }
+
+    // מסנן URL לבטוח להצגה כקישור (רק http/https)
+    safeUrl(url) {
+        if (!url) return '';
+        const u = String(url).trim();
+        return /^https?:\/\//i.test(u) ? u : '';
     }
 
     async fetchCardsFromGoogleSheet(sheetUrl, gid = '0') {
@@ -1351,6 +1373,7 @@ class CreativityCardsGame {
             title:         get('title','כותרת','card_title','heading'),
             prompt,
             follow_up:     get('follow_up','followup','המשך','רעיון המשך'),
+            followup_link: get('followup_link','follow_up_link','followup link','follow up link','קישור','קישור המשך','לינק','url'),
             encouragement: get('encouragement','עידוד','celebration'),
             share_text:    get('share_text','share','שיתוף','share text','לשיתוף','טקסט שיתוף','share_label')
         };
