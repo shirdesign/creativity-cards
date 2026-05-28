@@ -286,6 +286,15 @@ class CreativityCardsGame {
             ${s} .ccg-inner-btn:hover  { transform: translate(-2px,-2px); filter: drop-shadow(3px 3px 0 rgba(0,0,0,.3)); }
             ${s} .ccg-inner-btn:active { transform: translate(1px,1px);   filter: drop-shadow(1px 1px 0 rgba(0,0,0,.25)); }
 
+            /* אזור הפעולות בתוך הקלף: שתי הכפתורים + כפתור שיתוף מתחתם */
+            ${s} .ccg-card-actions-stack {
+                display: flex;
+                flex-direction: column;
+                gap: 14px;
+                align-items: center;
+            }
+            ${s} .ccg-card-actions-stack .ccg-share-button { margin: 0; }
+
             /* תיבות פרטים נוספים — מתחת לקלף */
             ${s} .ccg-followup-box,
             ${s} .ccg-encouragement-box {
@@ -933,15 +942,18 @@ class CreativityCardsGame {
                             ${card.title ? `<h2 class="ccg-card-title">${this.escapeHtml(card.title)}</h2>` : ''}
                             <div class="ccg-card-prompt">${this.escapeHtml(card.prompt)}</div>
                         </div>
-                        <div class="ccg-inner-actions">
-                            <button type="button" class="ccg-inner-btn" data-action="followup">
-                                <img src="${a}btn-orange.png" alt="${this.config.followup_button_label}" loading="lazy">
-                                <span>${this.config.followup_button_label}</span>
-                            </button>
-                            <button type="button" class="ccg-inner-btn" data-action="encouragement">
-                                <img src="${a}btn-yellow.png" alt="${this.config.encouragement_button_label}" loading="lazy">
-                                <span>${this.config.encouragement_button_label}</span>
-                            </button>
+                        <div class="ccg-card-actions-stack">
+                            <div class="ccg-inner-actions">
+                                <button type="button" class="ccg-inner-btn" data-action="followup">
+                                    <img src="${a}btn-orange.png" alt="${this.config.followup_button_label}" loading="lazy">
+                                    <span>${this.config.followup_button_label}</span>
+                                </button>
+                                <button type="button" class="ccg-inner-btn" data-action="encouragement">
+                                    <img src="${a}btn-yellow.png" alt="${this.config.encouragement_button_label}" loading="lazy">
+                                    <span>${this.config.encouragement_button_label}</span>
+                                </button>
+                            </div>
+                            ${shareBtn}
                         </div>
                     </div>
                 </div>
@@ -954,7 +966,6 @@ class CreativityCardsGame {
                     <button type="button" class="ccg-btn-new" data-action="new">
                         ${newBtnLabel}
                     </button>
-                    ${shareBtn}
                 </div>
 
                 <div class="ccg-status" aria-live="polite"></div>
