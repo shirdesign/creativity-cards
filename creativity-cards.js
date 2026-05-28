@@ -414,8 +414,8 @@ class CreativityCardsGame {
                 position: relative;
                 width: 100%;
                 max-width: min(820px, 98vw);
-                height: min(440px, 62vh);
-                margin: 100px auto 12px;
+                height: min(400px, 58vh);
+                margin: 50px auto 12px;
                 display: flex;
                 align-items: flex-end;
                 justify-content: center;
@@ -424,7 +424,7 @@ class CreativityCardsGame {
             /* ── ערמת קלפים — מסך בחירה ─────────────────────────────── */
             ${s} .ccg-deck-wrap {
                 position: relative;
-                width: min(260px, 60vw);
+                width: min(230px, 56vw);
                 aspect-ratio: 1306 / 1796;
                 cursor: pointer;
                 margin-bottom: 28px;
@@ -450,17 +450,17 @@ class CreativityCardsGame {
             /* 11 קלפים בערימה — מ-c11 (תחתון) עד c1 (עליון)
                c1-c3 שומרים על המיקום המקורי (אנימציית הערבוב תלויה בהם)
                c4-c11 מתפרשים יותר כדי שכל השכבות יראו */
-            ${s} .ccg-deck-c11 { transform: rotate(-18deg) translate(-32px, 30px); z-index: 1;  }
-            ${s} .ccg-deck-c10 { transform: rotate(-16deg) translate(-27px, 26px); z-index: 2;  }
-            ${s} .ccg-deck-c9  { transform: rotate(-14.5deg) translate(-23px, 22px); z-index: 3; }
-            ${s} .ccg-deck-c8  { transform: rotate(-13deg) translate(-19px, 18px); z-index: 4;  }
-            ${s} .ccg-deck-c7  { transform: rotate(-11.5deg) translate(-15px, 15px); z-index: 5; }
-            ${s} .ccg-deck-c6  { transform: rotate(-10.5deg) translate(-12px, 13px); z-index: 6; }
-            ${s} .ccg-deck-c5  { transform: rotate(-9.5deg) translate(-10px, 11px); z-index: 7;  }
-            ${s} .ccg-deck-c4  { transform: rotate(-9deg)  translate(-8px,  10px); z-index: 8;   }
-            ${s} .ccg-deck-c3  { transform: rotate(-8deg)  translate(-7px,  9px);   z-index: 9;  }
-            ${s} .ccg-deck-c2  { transform: rotate(-3deg)  translate(-2px,  3px);   z-index: 10; }
-            ${s} .ccg-deck-c1  { transform: rotate( 3deg);                          z-index: 11; }
+            ${s} .ccg-deck-c11 { transform: rotate(-23deg) translate(-46px, 40px); z-index: 1;  }
+            ${s} .ccg-deck-c10 { transform: rotate(-20deg) translate(-39px, 34px); z-index: 2;  }
+            ${s} .ccg-deck-c9  { transform: rotate(-17deg) translate(-32px, 28px); z-index: 3;  }
+            ${s} .ccg-deck-c8  { transform: rotate(-14deg) translate(-25px, 22px); z-index: 4;  }
+            ${s} .ccg-deck-c7  { transform: rotate(-12deg) translate(-19px, 18px); z-index: 5;  }
+            ${s} .ccg-deck-c6  { transform: rotate(-11deg) translate(-14px, 15px); z-index: 6;  }
+            ${s} .ccg-deck-c5  { transform: rotate(-10deg) translate(-11px, 12px); z-index: 7;  }
+            ${s} .ccg-deck-c4  { transform: rotate(-9deg)  translate(-8px,  10px); z-index: 8;  }
+            ${s} .ccg-deck-c3  { transform: rotate(-8deg)  translate(-7px,  9px);  z-index: 9;  }
+            ${s} .ccg-deck-c2  { transform: rotate(-3deg)  translate(-2px,  3px);  z-index: 10; }
+            ${s} .ccg-deck-c1  { transform: rotate( 3deg);                         z-index: 11; }
             ${s} .ccg-deck-wrap:hover .ccg-deck-c1 { filter: drop-shadow(0 10px 26px rgba(0,0,0,.35)); }
 
             /*
@@ -545,7 +545,7 @@ class CreativityCardsGame {
                 opacity: 1;
                 transform: translateX(-50%)
                            rotate(var(--fan-angle, 0deg))
-                           translateY(-286px);
+                           translateY(-260px);
             }
             ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(1) { transition-delay: .04s; }
             ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(2) { transition-delay: .09s; }
@@ -559,7 +559,7 @@ class CreativityCardsGame {
             ${s} .ccg-fan-wrap.active .ccg-fan-card:focus-visible {
                 transform: translateX(-50%)
                            rotate(var(--fan-angle, 0deg))
-                           translateY(-335px) scale(1.07);
+                           translateY(-305px) scale(1.07);
                 filter: drop-shadow(0 14px 24px rgba(0,0,0,.42));
                 z-index: 20;
                 outline: none;
@@ -568,7 +568,7 @@ class CreativityCardsGame {
             ${s} .ccg-fan-wrap .ccg-fan-card.picked {
                 transform: translateX(-50%)
                            rotate(0deg)
-                           translateY(-360px) scale(1.3) !important;
+                           translateY(-330px) scale(1.3) !important;
                 z-index: 50;
                 transition: transform .65s cubic-bezier(.5, 0, .3, 1),
                             filter .35s ease,
@@ -710,24 +710,24 @@ class CreativityCardsGame {
                 /* padding-top גדול יותר במובייל: 22% מ-310px = 68px, לא מספיק לסלוטייפ */
                 ${s} .ccg-card-overlay { padding-top: 30%; }
 
-                /* מניפה במובייל — מותאמת לגודל המוגדל */
-                ${s} .ccg-stage { height: min(390px, 56vh); margin-top: 80px; }
-                ${s} .ccg-fan-card { width: clamp(84px, 22vw, 118px); }
+                /* מניפה במובייל — מותאמת לגודל החדש */
+                ${s} .ccg-stage { height: min(360px, 52vh); margin-top: 40px; }
+                ${s} .ccg-fan-card { width: clamp(78px, 20vw, 108px); }
                 ${s} .ccg-fan-wrap.active .ccg-fan-card {
                     transform: translateX(-50%)
                                rotate(var(--fan-angle, 0deg))
-                               translateY(-221px);
+                               translateY(-200px);
                 }
                 ${s} .ccg-fan-wrap.active .ccg-fan-card:hover,
                 ${s} .ccg-fan-wrap.active .ccg-fan-card:focus-visible {
                     transform: translateX(-50%)
                                rotate(var(--fan-angle, 0deg))
-                               translateY(-258px) scale(1.06);
+                               translateY(-235px) scale(1.06);
                 }
                 ${s} .ccg-fan-wrap .ccg-fan-card.picked {
                     transform: translateX(-50%)
                                rotate(0deg)
-                               translateY(-273px) scale(1.2) !important;
+                               translateY(-250px) scale(1.2) !important;
                 }
             }
         `;
@@ -788,7 +788,7 @@ class CreativityCardsGame {
 
         let fanCardsHtml = '';
         for (let i = 0; i < fanCount; i++) {
-            const angle = fanCount > 1 ? -32 + (64 * i / (fanCount - 1)) : 0;
+            const angle = fanCount > 1 ? -48 + (96 * i / (fanCount - 1)) : 0;
             fanCardsHtml += `<button type="button" class="ccg-fan-card" data-fan-index="${i}" style="--fan-angle: ${angle}deg;" aria-label="קלף ${i + 1}">
                     <img src="${a}card-back-straight.png" alt="" loading="lazy" style="width:100%;height:100%;display:block;pointer-events:none;">
                 </button>`;
