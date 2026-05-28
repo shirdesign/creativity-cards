@@ -40,7 +40,7 @@ class CreativityCardsGame {
             start_tagline:              config.start_tagline              || 'הקלפים שיציתו לכם את ההשראה ויאמנו לכם את שריר היצירתיות',
             start_title:                config.start_title                || 'מכירים את הרגע שהראש נחסם?',
             start_subtitle:             config.start_subtitle             || 'באמצע עבודה שמצריכה ריכוז והרעיונות נגמרו? הכרטיסים האלה נבנו במיוחד בשבילכם — כל קלף פותח הראש אחרת.',
-            start_button_label:         config.start_button_label         || 'יאללה, בואי ננסה משהו חדש',
+            start_button_label:         config.start_button_label         || 'יאללה, בואו ננסה משהו חדש',
             select_button_label:        config.select_button_label        || 'בחר קלף מהחפיסה',
             cards_source:              (config.cards_source || 'manual').toLowerCase(),
             cards_manual:               config.cards_manual               || '[]',
