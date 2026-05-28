@@ -38,7 +38,7 @@ class CreativityCardsGame {
             start_title:                config.start_title                || 'מכירים את הרגע שהראש נחסם?',
             start_subtitle:             config.start_subtitle             || 'באמצע עבודה שמצריכה ריכוז והרעיונות נגמרו? הכרטיסים האלה נבנו במיוחד בשבילכם — כל קלף פותח הראש אחרת.',
             start_button_label:         config.start_button_label         || 'יאללה, בואי ננסה משהו חדש',
-            select_button_label:        config.select_button_label        || 'בחרו קלף השראה',
+            select_button_label:        config.select_button_label        || 'בחר קלף מהחפיסה',
             cards_source:              (config.cards_source || 'manual').toLowerCase(),
             cards_manual:               config.cards_manual               || '[]',
             cards_sheet_url:            config.cards_sheet_url            || '',
@@ -234,11 +234,11 @@ class CreativityCardsGame {
             ${s} .ccg-card-text { padding-bottom: 6px; }
             ${s} .ccg-card-title {
                 font-family: 'OHEyalMeirBerkowitz', 'Heebo', sans-serif;
-                font-size: clamp(19px, 3vw, 25px);
-                font-weight: normal;
+                font-size: clamp(28px, 4.5vw, 38px);
+                font-weight: 700;
                 color: ${ctc};
-                margin: 0 0 6px;
-                line-height: 1.35;
+                margin: 0 0 10px;
+                line-height: 1.25;
             }
             ${s} .ccg-card-prompt {
                 font-family: 'OHEyalMeirBerkowitz', 'Heebo', sans-serif;
@@ -516,6 +516,7 @@ class CreativityCardsGame {
                 height: 100%;
                 pointer-events: none;
                 opacity: 0;
+                transform: translateY(100px); /* מנמיך את המניפה ב-100px ביחס לערמה */
                 transition: opacity .35s ease;
             }
             ${s} .ccg-fan-wrap.active {
@@ -526,7 +527,7 @@ class CreativityCardsGame {
                 position: absolute;
                 bottom: 0;
                 left: 0;
-                width: clamp(102px, 14vw, 162px);
+                width: clamp(82px, 11vw, 116px);
                 aspect-ratio: 1306 / 1796;
                 transform-origin: 50% 100%;
                 /* מצב התחלתי: ערימה במרכז */
@@ -545,21 +546,25 @@ class CreativityCardsGame {
                 opacity: 1;
                 transform: translateX(-50%)
                            rotate(var(--fan-angle, 0deg))
-                           translateY(-260px);
+                           translateY(-280px);
             }
-            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(1) { transition-delay: .04s; }
-            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(2) { transition-delay: .09s; }
-            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(3) { transition-delay: .14s; }
-            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(4) { transition-delay: .19s; }
-            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(5) { transition-delay: .24s; }
-            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(6) { transition-delay: .29s; }
-            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(7) { transition-delay: .34s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(1)  { transition-delay: .04s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(2)  { transition-delay: .08s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(3)  { transition-delay: .12s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(4)  { transition-delay: .16s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(5)  { transition-delay: .20s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(6)  { transition-delay: .24s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(7)  { transition-delay: .28s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(8)  { transition-delay: .32s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(9)  { transition-delay: .36s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(10) { transition-delay: .40s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(11) { transition-delay: .44s; }
 
             ${s} .ccg-fan-wrap.active .ccg-fan-card:hover,
             ${s} .ccg-fan-wrap.active .ccg-fan-card:focus-visible {
                 transform: translateX(-50%)
                            rotate(var(--fan-angle, 0deg))
-                           translateY(-305px) scale(1.07);
+                           translateY(-322px) scale(1.07);
                 filter: drop-shadow(0 14px 24px rgba(0,0,0,.42));
                 z-index: 20;
                 outline: none;
@@ -568,7 +573,7 @@ class CreativityCardsGame {
             ${s} .ccg-fan-wrap .ccg-fan-card.picked {
                 transform: translateX(-50%)
                            rotate(0deg)
-                           translateY(-330px) scale(1.3) !important;
+                           translateY(-350px) scale(1.3) !important;
                 z-index: 50;
                 transition: transform .65s cubic-bezier(.5, 0, .3, 1),
                             filter .35s ease,
@@ -581,11 +586,9 @@ class CreativityCardsGame {
                 pointer-events: none;
             }
 
-            ${s} .ccg-pick-btn.hidden {
-                opacity: 0;
-                pointer-events: none;
-                transform: scale(.9);
-                transition: opacity .25s ease, transform .25s ease;
+            ${s} .ccg-pick-btn[disabled] {
+                cursor: default;
+                opacity: .65;
             }
 
             /* כפתור שיתוף */
@@ -699,7 +702,7 @@ class CreativityCardsGame {
                 ${s} .ccg-card-visual-wrapper { width: min(310px, 90vw); }
                 ${s} .ccg-card-open .ccg-logo-small { width: min(120px, 28vw); top: 8px; right: 10px; }
                 /* גופן קטן יותר במובייל כדי שהקלף לא יתארך יותר מדי */
-                ${s} .ccg-card-title  { font-size: clamp(15px, 4vw, 19px); }
+                ${s} .ccg-card-title  { font-size: clamp(20px, 5.5vw, 26px); font-weight: 700; }
                 ${s} .ccg-card-prompt { font-size: clamp(14px, 3.8vw, 17px); }
                 ${s} .ccg-card-bottom-row { flex-direction: column; align-items: center; gap: 6px; }
                 ${s} .ccg-btn-new { width: 100%; justify-content: center; }
@@ -710,24 +713,25 @@ class CreativityCardsGame {
                 /* padding-top גדול יותר במובייל: 22% מ-310px = 68px, לא מספיק לסלוטייפ */
                 ${s} .ccg-card-overlay { padding-top: 30%; }
 
-                /* מניפה במובייל — מותאמת לגודל החדש */
+                /* מניפה במובייל — מותאמת ל-11 קלפים */
                 ${s} .ccg-stage { height: min(360px, 52vh); margin-top: 40px; }
-                ${s} .ccg-fan-card { width: clamp(78px, 20vw, 108px); }
+                ${s} .ccg-fan-wrap { transform: translateY(80px); }
+                ${s} .ccg-fan-card { width: clamp(64px, 17vw, 88px); }
                 ${s} .ccg-fan-wrap.active .ccg-fan-card {
                     transform: translateX(-50%)
                                rotate(var(--fan-angle, 0deg))
-                               translateY(-200px);
+                               translateY(-215px);
                 }
                 ${s} .ccg-fan-wrap.active .ccg-fan-card:hover,
                 ${s} .ccg-fan-wrap.active .ccg-fan-card:focus-visible {
                     transform: translateX(-50%)
                                rotate(var(--fan-angle, 0deg))
-                               translateY(-235px) scale(1.06);
+                               translateY(-248px) scale(1.06);
                 }
                 ${s} .ccg-fan-wrap .ccg-fan-card.picked {
                     transform: translateX(-50%)
                                rotate(0deg)
-                               translateY(-250px) scale(1.2) !important;
+                               translateY(-268px) scale(1.2) !important;
                 }
             }
         `;
@@ -784,11 +788,11 @@ class CreativityCardsGame {
 
         const a        = this.config.assets_url;
         const btnLabel = this.config.select_button_label;
-        const fanCount = Math.min(this.state.deck.length, 7);
+        const fanCount = Math.min(this.state.deck.length, 11);
 
         let fanCardsHtml = '';
         for (let i = 0; i < fanCount; i++) {
-            const angle = fanCount > 1 ? -48 + (96 * i / (fanCount - 1)) : 0;
+            const angle = fanCount > 1 ? -55 + (110 * i / (fanCount - 1)) : 0;
             fanCardsHtml += `<button type="button" class="ccg-fan-card" data-fan-index="${i}" style="--fan-angle: ${angle}deg;" aria-label="קלף ${i + 1}">
                     <img src="${a}card-back-straight.png" alt="" loading="lazy" style="width:100%;height:100%;display:block;pointer-events:none;">
                 </button>`;
@@ -827,12 +831,23 @@ class CreativityCardsGame {
                 ${this.creditHtml()}
             </div>`;
 
-        const startShuffle = () => this.shuffleAndShowFan();
-        this.container.querySelector('.ccg-pick-target')?.addEventListener('click', startShuffle);
+        const pickAction = () => {
+            const fanOpen = this.container.querySelector('.ccg-fan-wrap.active');
+            if (fanOpen) this.pickRandomFromFan();
+            else this.shuffleAndShowFan();
+        };
+        this.container.querySelector('.ccg-pick-target')?.addEventListener('click', pickAction);
         this.container.querySelector('.ccg-pick-target')?.addEventListener('keydown', e => {
-            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); startShuffle(); }
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickAction(); }
         });
-        this.container.querySelector('.ccg-pick-btn')?.addEventListener('click', startShuffle);
+        this.container.querySelector('.ccg-pick-btn')?.addEventListener('click', pickAction);
+    }
+
+    pickRandomFromFan() {
+        const fanCards = this.container.querySelectorAll('.ccg-fan-card:not(.picked)');
+        if (!fanCards.length) return;
+        const target = fanCards[Math.floor(Math.random() * fanCards.length)];
+        this.pickFromFan(target);
     }
 
     shuffleAndShowFan() {
@@ -856,7 +871,7 @@ class CreativityCardsGame {
             deckWrap.classList.add('hidden');
             fanWrap.classList.add('active');
             fanWrap.setAttribute('aria-hidden', 'false');
-            if (pickBtn) pickBtn.classList.add('hidden');
+            if (pickBtn) pickBtn.disabled = false;
 
             fanWrap.querySelectorAll('.ccg-fan-card').forEach(el => {
                 el.addEventListener('click', () => this.pickFromFan(el));

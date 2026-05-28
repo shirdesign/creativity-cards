@@ -25,7 +25,7 @@ window.CREATIVITY_CARDS_CONFIG = {
     shuffle_screen_text: 'מוכנים להיות יצירתיים? מתחו אצבעות, שנסו מותניים ולחצו על הכפתור.',
 
     // כפתור שליפת קלף
-    select_button_label: 'ערבב ושלוף לי קלף יצירתי',
+    select_button_label: 'בחר קלף מהחפיסה',
 
     // כפתור לחזרה לחפיסה מתוך הקלף הפתוח
     new_card_button_label: 'חזרה לחפיסה',
