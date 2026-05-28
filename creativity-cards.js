@@ -400,6 +400,18 @@ class CreativityCardsGame {
                 pointer-events: none;
             }
 
+            /* ── stage — מכיל גם את הערמה וגם את המניפה ─────────────── */
+            ${s} .ccg-stage {
+                position: relative;
+                width: 100%;
+                max-width: min(720px, 96vw);
+                height: min(360px, 56vh);
+                margin: 8px auto 12px;
+                display: flex;
+                align-items: flex-end;
+                justify-content: center;
+            }
+
             /* ── ערמת קלפים — מסך בחירה ─────────────────────────────── */
             ${s} .ccg-deck-wrap {
                 position: relative;
@@ -408,6 +420,13 @@ class CreativityCardsGame {
                 cursor: pointer;
                 margin-bottom: 28px;
                 flex-shrink: 0;
+                transition: opacity .35s ease, transform .35s ease;
+            }
+            ${s} .ccg-stage .ccg-deck-wrap { margin-bottom: 12px; }
+            ${s} .ccg-deck-wrap.hidden {
+                opacity: 0;
+                pointer-events: none;
+                transform: scale(.85);
             }
             ${s} .ccg-deck-card {
                 position: absolute;
@@ -435,53 +454,145 @@ class CreativityCardsGame {
 
             /*
              * Fan-shuffle: הקלפים נפתחים כמו מניפה (c1 ימינה, c3 שמאלה)
-             * ואז מתקפלים בחזרה — כמו ערבוב חפיסת קלפים אמיתית
+             * ואז מתקפלים בחזרה — כמו ערבוב חפיסת קלפים אמיתית.
+             * שני סבבים: פתיחה רחבה → סגירה → פתיחה הפוכה → סגירה.
              */
             @keyframes ccgDeckS1 {
-                /* קלף עליון — נפתח ימינה, חוזר */
+                /* קלף עליון — שני סבבים: ימינה → מרכז → שמאלה → מרכז */
                 0%,100% { transform: rotate(3deg); }
-                25%     { transform: rotate(32deg)  translate(28px, -8px);  }
-                45%     { transform: rotate(38deg)  translate(35px, -12px); }
-                65%     { transform: rotate(22deg)  translate(18px, -5px);  }
-                82%     { transform: rotate(8deg)   translate(5px,  -1px);  }
+                18%     { transform: rotate(34deg)  translate(32px, -10px); }
+                32%     { transform: rotate(40deg)  translate(40px, -14px); }
+                50%     { transform: rotate(8deg)   translate(4px,  -2px);  }
+                64%     { transform: rotate(-22deg) translate(-18px, -8px); }
+                78%     { transform: rotate(-28deg) translate(-26px, -10px); }
+                92%     { transform: rotate(5deg)   translate(2px,  -1px);  }
             }
             @keyframes ccgDeckS2 {
-                /* קלף אמצעי — עולה קצת ונשאר מרכזי */
+                /* קלף אמצעי — קופץ למעלה, נחתך, חוזר */
                 0%,100% { transform: rotate(-3deg) translate(-2px, 3px); }
-                30%     { transform: rotate(0deg)  translate(0,   -18px); }
-                55%     { transform: rotate(2deg)  translate(4px,  -12px); }
-                75%     { transform: rotate(0deg)  translate(0,    -4px);  }
+                22%     { transform: rotate(2deg)  translate(0,  -22px); }
+                42%     { transform: rotate(-1deg) translate(2px, -6px); }
+                62%     { transform: rotate(3deg)  translate(-1px,-20px); }
+                82%     { transform: rotate(-2deg) translate(0,  -4px);  }
             }
             @keyframes ccgDeckS3 {
-                /* קלף תחתון — נפתח שמאלה, חוזר */
+                /* קלף תחתון — הפוך מ-S1: שמאלה → מרכז → ימינה → מרכז */
                 0%,100% { transform: rotate(-8deg) translate(-7px, 9px); }
-                25%     { transform: rotate(-34deg) translate(-32px, -8px);  }
-                45%     { transform: rotate(-40deg) translate(-40px, -12px); }
-                65%     { transform: rotate(-24deg) translate(-20px, -4px);  }
-                82%     { transform: rotate(-10deg) translate(-9px,  4px);   }
+                18%     { transform: rotate(-36deg) translate(-34px, -10px); }
+                32%     { transform: rotate(-42deg) translate(-42px, -14px); }
+                50%     { transform: rotate(-10deg) translate(-8px, 4px);   }
+                64%     { transform: rotate(20deg)  translate(16px, -8px);  }
+                78%     { transform: rotate(26deg)  translate(22px, -10px); }
+                92%     { transform: rotate(-6deg)  translate(-6px, 6px);   }
             }
-            ${s} .ccg-deck-wrap.shuffling { pointer-events: none; }
+            ${s} .ccg-deck-wrap.shuffling { pointer-events: none; cursor: default; }
             ${s} .ccg-deck-wrap.shuffling .ccg-deck-c1 {
-                animation: ccgDeckS1 .85s cubic-bezier(.25,.46,.45,.94) forwards;
+                animation: ccgDeckS1 1.25s cubic-bezier(.25,.46,.45,.94) forwards;
             }
             ${s} .ccg-deck-wrap.shuffling .ccg-deck-c2 {
-                animation: ccgDeckS2 .85s cubic-bezier(.25,.46,.45,.94) .04s forwards;
+                animation: ccgDeckS2 1.25s cubic-bezier(.25,.46,.45,.94) .05s forwards;
             }
             ${s} .ccg-deck-wrap.shuffling .ccg-deck-c3 {
-                animation: ccgDeckS3 .85s cubic-bezier(.25,.46,.45,.94) .08s forwards;
+                animation: ccgDeckS3 1.25s cubic-bezier(.25,.46,.45,.94) .1s forwards;
             }
 
-            /* טקסט על מסך הבחירה */
-            ${s} .ccg-shuffle-text {
-                font-size: clamp(14px,1.8vw,17px);
+            /* ── מניפת קלפים — אחרי הערבוב, לבחירה ───────────────────── */
+            ${s} .ccg-fan-wrap {
+                position: absolute;
+                left: 50%;
+                bottom: 8px;
+                width: 0;
+                height: 100%;
+                pointer-events: none;
+                opacity: 0;
+                transition: opacity .35s ease;
+            }
+            ${s} .ccg-fan-wrap.active {
+                opacity: 1;
+                pointer-events: auto;
+            }
+            ${s} .ccg-fan-card {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: clamp(78px, 11vw, 124px);
+                aspect-ratio: 1306 / 1796;
+                transform-origin: 50% 100%;
+                /* מצב התחלתי: ערימה במרכז */
+                transform: translateX(-50%) translateY(-10px) rotate(0deg) scale(.7);
+                opacity: 0;
+                transition: transform .55s cubic-bezier(.34, 1.35, .64, 1),
+                            filter .25s ease,
+                            opacity .35s ease;
+                cursor: pointer;
+                filter: drop-shadow(0 6px 16px rgba(0,0,0,.28));
+                border: none;
+                background: transparent;
+                padding: 0;
+            }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card {
+                opacity: 1;
+                transform: translateX(-50%)
+                           rotate(var(--fan-angle, 0deg))
+                           translateY(-220px);
+            }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(1) { transition-delay: .04s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(2) { transition-delay: .09s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(3) { transition-delay: .14s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(4) { transition-delay: .19s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(5) { transition-delay: .24s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(6) { transition-delay: .29s; }
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:nth-child(7) { transition-delay: .34s; }
+
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:hover,
+            ${s} .ccg-fan-wrap.active .ccg-fan-card:focus-visible {
+                transform: translateX(-50%)
+                           rotate(var(--fan-angle, 0deg))
+                           translateY(-258px) scale(1.07);
+                filter: drop-shadow(0 14px 24px rgba(0,0,0,.42));
+                z-index: 20;
+                outline: none;
+            }
+
+            ${s} .ccg-fan-wrap .ccg-fan-card.picked {
+                transform: translateX(-50%)
+                           rotate(0deg)
+                           translateY(-280px) scale(1.3) !important;
+                z-index: 50;
+                transition: transform .65s cubic-bezier(.5, 0, .3, 1),
+                            filter .35s ease,
+                            opacity .35s ease;
+                filter: drop-shadow(0 18px 28px rgba(0,0,0,.45));
+            }
+            ${s} .ccg-fan-wrap.picking .ccg-fan-card:not(.picked) {
+                opacity: .25;
+                filter: drop-shadow(0 4px 10px rgba(0,0,0,.15));
+                pointer-events: none;
+            }
+
+            /* טקסט עזר על מסך הבחירה */
+            ${s} .ccg-shuffle-hint {
+                font-size: clamp(14px,1.8vw,16px);
                 color: #444;
-                background: rgba(255,255,255,.78);
+                background: rgba(255,255,255,.82);
                 border-radius: 12px;
-                padding: 10px 18px;
-                line-height: 1.6;
+                padding: 9px 18px;
+                line-height: 1.5;
                 text-align: center;
-                max-width: min(340px, 82vw);
+                max-width: min(360px, 84vw);
                 backdrop-filter: blur(3px);
+                margin: 4px 0 14px;
+                min-height: 38px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background .2s ease;
+            }
+            ${s} .ccg-pick-btn.hidden {
+                opacity: 0;
+                pointer-events: none;
+                transform: scale(.9);
+                transition: opacity .25s ease, transform .25s ease;
             }
 
             /* כפתור שיתוף */
@@ -593,6 +704,26 @@ class CreativityCardsGame {
                 ${s} .ccg-inner-btn { width: min(234px, 80vw); }
                 /* padding-top גדול יותר במובייל: 22% מ-310px = 68px, לא מספיק לסלוטייפ */
                 ${s} .ccg-card-overlay { padding-top: 30%; }
+
+                /* מניפה קטנה ומקושתת יותר במובייל */
+                ${s} .ccg-stage { height: min(300px, 50vh); }
+                ${s} .ccg-fan-card { width: clamp(64px, 17vw, 90px); }
+                ${s} .ccg-fan-wrap.active .ccg-fan-card {
+                    transform: translateX(-50%)
+                               rotate(var(--fan-angle, 0deg))
+                               translateY(-170px);
+                }
+                ${s} .ccg-fan-wrap.active .ccg-fan-card:hover,
+                ${s} .ccg-fan-wrap.active .ccg-fan-card:focus-visible {
+                    transform: translateX(-50%)
+                               rotate(var(--fan-angle, 0deg))
+                               translateY(-198px) scale(1.06);
+                }
+                ${s} .ccg-fan-wrap .ccg-fan-card.picked {
+                    transform: translateX(-50%)
+                               rotate(0deg)
+                               translateY(-210px) scale(1.2) !important;
+                }
             }
         `;
         document.head.appendChild(style);
@@ -648,24 +779,44 @@ class CreativityCardsGame {
 
         const a        = this.config.assets_url;
         const btnLabel = this.config.select_button_label;
+        const fanCount = Math.min(this.state.deck.length, 7);
+
+        let fanCardsHtml = '';
+        for (let i = 0; i < fanCount; i++) {
+            const angle = fanCount > 1 ? -32 + (64 * i / (fanCount - 1)) : 0;
+            fanCardsHtml += `<button type="button" class="ccg-fan-card" data-fan-index="${i}" style="--fan-angle: ${angle}deg;" aria-label="קלף ${i + 1}">
+                    <img src="${a}card-back-straight.png" alt="" loading="lazy" style="width:100%;height:100%;display:block;pointer-events:none;">
+                </button>`;
+        }
 
         this.container.innerHTML = `
             <div class="ccg ccg-selection">
                 ${this.logoHtml('ccg-logo-small')}
-                <!-- ערמת קלפים — לחיצה או כפתור מפעילים את הערבוב -->
-                <div class="ccg-deck-wrap ccg-pick-target" role="button" aria-label="${btnLabel}" tabindex="0">
-                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c11" alt="" loading="lazy">
-                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c10" alt="" loading="lazy">
-                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c9"  alt="" loading="lazy">
-                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c8"  alt="" loading="lazy">
-                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c7"  alt="" loading="lazy">
-                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c6"  alt="" loading="lazy">
-                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c5"  alt="" loading="lazy">
-                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c4"  alt="" loading="lazy">
-                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c3"  alt="" loading="lazy">
-                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c2"  alt="" loading="lazy">
-                    <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c1"  alt="ערמת קלפים" loading="lazy">
+
+                <div class="ccg-stage">
+                    <!-- ערמת קלפים — מוצגת בהתחלה, נעלמת אחרי ערבוב -->
+                    <div class="ccg-deck-wrap ccg-pick-target" role="button" aria-label="ערבבי את הקלפים" tabindex="0">
+                        <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c11" alt="" loading="lazy">
+                        <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c10" alt="" loading="lazy">
+                        <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c9"  alt="" loading="lazy">
+                        <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c8"  alt="" loading="lazy">
+                        <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c7"  alt="" loading="lazy">
+                        <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c6"  alt="" loading="lazy">
+                        <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c5"  alt="" loading="lazy">
+                        <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c4"  alt="" loading="lazy">
+                        <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c3"  alt="" loading="lazy">
+                        <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c2"  alt="" loading="lazy">
+                        <img src="${a}card-back-straight.png" class="ccg-deck-card ccg-deck-c1"  alt="ערמת קלפים" loading="lazy">
+                    </div>
+
+                    <!-- מניפת קלפים — מוצגת אחרי ערבוב, לבחירה -->
+                    <div class="ccg-fan-wrap" aria-hidden="true">
+                        ${fanCardsHtml}
+                    </div>
                 </div>
+
+                <div class="ccg-shuffle-hint" role="status" aria-live="polite">לחצי על הערמה כדי לערבב</div>
+
                 <button type="button" class="ccg-btn-enter ccg-pick-btn">
                     <img src="${a}btn-enter.png" alt="${btnLabel}" loading="lazy">
                     <span>${btnLabel}</span>
@@ -673,14 +824,58 @@ class CreativityCardsGame {
                 ${this.creditHtml()}
             </div>`;
 
-        const pick = () => this.revealCard();
-        this.container.querySelector('.ccg-pick-target')?.addEventListener('click', pick);
-        this.container.querySelector('.ccg-pick-target')?.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') pick(); });
-        this.container.querySelector('.ccg-pick-btn')?.addEventListener('click', pick);
+        const startShuffle = () => this.shuffleAndShowFan();
+        this.container.querySelector('.ccg-pick-target')?.addEventListener('click', startShuffle);
+        this.container.querySelector('.ccg-pick-target')?.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); startShuffle(); }
+        });
+        this.container.querySelector('.ccg-pick-btn')?.addEventListener('click', startShuffle);
     }
 
-    revealCard() {
+    shuffleAndShowFan() {
         if (!this.state.deck.length) { this.renderDeckEmpty(); return; }
+
+        const deckWrap = this.container.querySelector('.ccg-deck-wrap');
+        const fanWrap  = this.container.querySelector('.ccg-fan-wrap');
+        const pickBtn  = this.container.querySelector('.ccg-pick-btn');
+        const hint     = this.container.querySelector('.ccg-shuffle-hint');
+
+        // אם המניפה כבר פתוחה — לא לפתוח שוב
+        if (!deckWrap || !fanWrap || fanWrap.classList.contains('active')) return;
+        if (deckWrap.classList.contains('shuffling')) return;
+
+        if (pickBtn) pickBtn.disabled = true;
+        if (hint) hint.textContent = 'מערבבים את הקלפים...';
+        deckWrap.classList.add('shuffling');
+
+        let opened = false;
+        const openFan = () => {
+            if (opened) return;
+            opened = true;
+            deckWrap.classList.add('hidden');
+            fanWrap.classList.add('active');
+            fanWrap.setAttribute('aria-hidden', 'false');
+            if (hint) hint.textContent = 'בחרי קלף מהמניפה';
+            if (pickBtn) pickBtn.classList.add('hidden');
+
+            fanWrap.querySelectorAll('.ccg-fan-card').forEach(el => {
+                el.addEventListener('click', () => this.pickFromFan(el));
+            });
+        };
+
+        // ממתינים לסוף אנימציית הערבוב + fallback
+        deckWrap.querySelector('.ccg-deck-c1')
+            ?.addEventListener('animationend', openFan, { once: true });
+        setTimeout(openFan, 1400);
+    }
+
+    pickFromFan(cardEl) {
+        const fanWrap = this.container.querySelector('.ccg-fan-wrap');
+        if (!fanWrap || fanWrap.classList.contains('picking')) return;
+        if (!this.state.deck.length) { this.renderDeckEmpty(); return; }
+
+        fanWrap.classList.add('picking');
+        cardEl.classList.add('picked');
 
         let revealed = false;
         const doReveal = () => {
@@ -693,25 +888,13 @@ class CreativityCardsGame {
             this.renderCard(card);
         };
 
-        const deckWrap = this.container.querySelector('.ccg-deck-wrap');
-        const pickBtn  = this.container.querySelector('.ccg-pick-btn');
-
-        if (deckWrap) {
-            // אנימציית ערבוב על כל הקלפים בערימה
-            if (pickBtn) pickBtn.disabled = true;
-            deckWrap.classList.add('shuffling');
-            // מחכים לסוף אנימציית הקלף הראשון; fallback ב-900ms
-            deckWrap.querySelector('.ccg-deck-c1')?.addEventListener('animationend', doReveal, { once: true });
-            setTimeout(doReveal, 900);
-        } else if (pickBtn) {
-            // fallback: אנימציה על הכפתור עצמו
-            pickBtn.disabled = true;
-            pickBtn.classList.add('shuffling');
-            pickBtn.addEventListener('animationend', doReveal, { once: true });
-            setTimeout(doReveal, 800);
-        } else {
+        const onEnd = e => {
+            if (e.propertyName !== 'transform') return;
+            cardEl.removeEventListener('transitionend', onEnd);
             doReveal();
-        }
+        };
+        cardEl.addEventListener('transitionend', onEnd);
+        setTimeout(doReveal, 750);
     }
 
     renderCard(card) {
