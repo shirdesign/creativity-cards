@@ -360,14 +360,16 @@ class CreativityCardsGame {
             ${s} .ccg-encouragement-box { border-right: 3px solid ${pc}; }
             /* קישור בתיבת ה-followup — כל הטקסט קליקבילי */
             ${s} .ccg-followup-box a {
-                color: ${sc};
-                text-decoration: underline;
-                text-underline-offset: 2px;
+                color: inherit;
+                text-decoration: none;
                 font-weight: 600;
                 cursor: pointer;
                 transition: opacity .15s ease;
             }
-            ${s} .ccg-followup-box a:hover { opacity: .78; }
+            ${s} .ccg-followup-box a:hover {
+                text-decoration: underline;
+                text-underline-offset: 2px;
+            }
             ${s} .ccg-followup-box.active,
             ${s} .ccg-encouragement-box.active { display: block; animation: ccgFadeIn .35s ease; }
 
