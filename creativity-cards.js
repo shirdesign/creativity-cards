@@ -168,12 +168,12 @@ class CreativityCardsGame {
                 opacity: .85;
             }
             ${s} .ccg-start-main-title {
-                font-family: 'OHEyalMeirBerkowitz', 'Heebo', sans-serif;
+                font-family: '${ff}', 'Assistant', 'Rubik', 'Arial', sans-serif;
                 font-size: clamp(40px,6vw,60px);
-                font-weight: 700;
+                font-weight: 800;
                 color: ${ctc};
                 margin: 0;
-                line-height: 1.05;
+                line-height: 1.1;
             }
             ${s} .ccg-start-tagline {
                 font-size: clamp(16px,2vw,20px);
