@@ -35,6 +35,9 @@ class CreativityCardsGame {
         };
 
         const normalized = {
+            start_welcome_label:        config.start_welcome_label        || 'ברוכים הבאים אל',
+            start_main_title:           config.start_main_title           || 'קלפי היצירתיות',
+            start_tagline:              config.start_tagline              || 'הקלפים שיציתו לכם את ההשראה ויאמנו לכם את שריר היצירתיות',
             start_title:                config.start_title                || 'מכירים את הרגע שהראש נחסם?',
             start_subtitle:             config.start_subtitle             || 'באמצע עבודה שמצריכה ריכוז והרעיונות נגמרו? הכרטיסים האלה נבנו במיוחד בשבילכם — כל קלף פותח הראש אחרת.',
             start_button_label:         config.start_button_label         || 'יאללה, בואי ננסה משהו חדש',
@@ -139,23 +142,55 @@ class CreativityCardsGame {
                 background: rgba(255,255,255,0.88);
                 backdrop-filter: blur(4px);
                 border-radius: 20px;
-                padding: clamp(24px,3vw,40px) clamp(20px,4vw,56px);
+                padding: clamp(28px,3.4vw,44px) clamp(20px,4vw,56px);
                 margin: clamp(16px,4vw,40px);
                 text-align: center;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 16px;
+                gap: 18px;
                 box-shadow: 0 8px 40px rgba(0,0,0,.15);
-                max-width: 640px;
+                max-width: 660px;
                 width: 100%;
             }
-            ${s} .ccg-start-heading {
-                font-size: clamp(24px,3.4vw,39px);
-                font-weight: 800;
+            /* קבוצת כותרת — "ברוכים הבאים אל" + "קלפי היצירתיות" צמודים */
+            ${s} .ccg-start-heading-group {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 2px;
+            }
+            ${s} .ccg-start-welcome {
+                font-size: clamp(16px,2vw,20px);
+                font-weight: 600;
+                color: ${tc};
+                line-height: 1.3;
+                opacity: .85;
+            }
+            ${s} .ccg-start-main-title {
+                font-family: 'OHEyalMeirBerkowitz', 'Heebo', sans-serif;
+                font-size: clamp(40px,6vw,60px);
+                font-weight: 700;
                 color: ${ctc};
                 margin: 0;
-                line-height: 1.2;
+                line-height: 1.05;
+            }
+            ${s} .ccg-start-tagline {
+                font-size: clamp(16px,2vw,20px);
+                font-weight: 500;
+                margin: 0;
+                color: ${tc};
+                line-height: 1.45;
+                max-width: 520px;
+            }
+            /* תת-כותרת מודגשת — טקסט גוף 110%, לא heading */
+            ${s} .ccg-start-subheading {
+                font-size: clamp(15px,1.85vw,18.7px);
+                font-weight: 700;
+                margin: 0;
+                color: ${ctc};
+                line-height: 1.5;
+                max-width: 520px;
             }
             ${s} .ccg-start-subtitle {
                 font-size: clamp(13px,1.7vw,17px);
@@ -674,7 +709,8 @@ class CreativityCardsGame {
                 z-index: 5;
             }
             @media (min-width: 481px) {
-                ${s} .ccg-selection .ccg-logo-small {
+                ${s} .ccg-selection .ccg-logo-small,
+                ${s} .ccg-start-screen .ccg-logo-small {
                     position: absolute;
                     top: 14px;
                     right: calc((100% - min(676px, 92vw)) / 2);
@@ -687,7 +723,8 @@ class CreativityCardsGame {
             /* דסקטופ רחב ≥1100px: מקום פנוי → לוגו מחוץ לקלף, 8px מימינו */
             @media (min-width: 1100px) {
                 ${s} .ccg-card-open .ccg-logo-small,
-                ${s} .ccg-selection .ccg-logo-small {
+                ${s} .ccg-selection .ccg-logo-small,
+                ${s} .ccg-start-screen .ccg-logo-small {
                     right: auto;
                     left: calc(50% + 346px);
                 }
@@ -729,6 +766,13 @@ class CreativityCardsGame {
                 ${s} .ccg-inner-responses { grid-template-columns: 1fr; }
                 /* padding-top גדול יותר במובייל: 22% מ-310px = 68px, לא מספיק לסלוטייפ */
                 ${s} .ccg-card-overlay { padding-top: 30%; }
+
+                /* מסך פתיחה במובייל — טקסטים מותאמים */
+                ${s} .ccg-start-welcome  { font-size: clamp(14px, 4vw, 17px); }
+                ${s} .ccg-start-main-title { font-size: clamp(32px, 8vw, 42px); }
+                ${s} .ccg-start-tagline  { font-size: clamp(14px, 4vw, 17px); }
+                ${s} .ccg-start-subheading { font-size: clamp(14px, 3.6vw, 16px); }
+                ${s} .ccg-start-subtitle { font-size: clamp(13px, 3.3vw, 15px); }
 
                 /* מניפה במובייל — מותאמת ל-11 קלפים */
                 ${s} .ccg-stage { height: min(360px, 52vh); margin-top: 40px; }
@@ -780,13 +824,26 @@ class CreativityCardsGame {
 
     renderStartScreen() {
         const a        = this.config.assets_url;
-        const btnLabel = this.config.start_button_label;
+        const c        = this.config;
+        const btnLabel = c.start_button_label;
+
+        const welcomeHtml    = c.start_welcome_label ? `<div class="ccg-start-welcome">${this.escapeHtml(c.start_welcome_label)}</div>` : '';
+        const mainTitleHtml  = c.start_main_title    ? `<h1 class="ccg-start-main-title">${this.escapeHtml(c.start_main_title)}</h1>` : '';
+        const taglineHtml    = c.start_tagline       ? `<p class="ccg-start-tagline">${this.escapeHtml(c.start_tagline)}</p>` : '';
+        const subHeadingHtml = c.start_title         ? `<p class="ccg-start-subheading">${this.escapeHtml(c.start_title)}</p>` : '';
+        const bodyHtml       = c.start_subtitle      ? `<p class="ccg-start-subtitle">${this.escapeHtml(c.start_subtitle)}</p>` : '';
+
         this.container.innerHTML = `
             <div class="ccg ccg-start-screen">
+                ${this.logoHtml('ccg-logo-small')}
                 <div class="ccg-start-overlay">
-                    ${this.logoHtml('ccg-logo-main')}
-                    <h1 class="ccg-start-heading">${this.config.start_title}</h1>
-                    <p class="ccg-start-subtitle">${this.config.start_subtitle}</p>
+                    <div class="ccg-start-heading-group">
+                        ${welcomeHtml}
+                        ${mainTitleHtml}
+                    </div>
+                    ${taglineHtml}
+                    ${subHeadingHtml}
+                    ${bodyHtml}
                     <button type="button" class="ccg-btn-enter ccg-start-btn">
                         <img src="${a}btn-enter.png" alt="${btnLabel}" loading="lazy">
                         <span>${btnLabel}</span>
@@ -1272,6 +1329,7 @@ class CreativityCardsGame {
     }
     // ── עזרי תצוגה ──────────────────────────────────────────────────────────
     // מנקה תווי HTML מסוכנים + ממיר ירידות שורה ל-<br> להצגה נכונה
+    // כמו כן: כל . / ? / ! שאחריהם רווח → שבירת שורה (בקשת הלקוחה)
     escapeHtml(str) {
         if (!str) return '';
         return String(str)
@@ -1279,7 +1337,9 @@ class CreativityCardsGame {
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;')
-            .replace(/\r\n|\r|\n/g, '<br>');
+            .replace(/\r\n|\r|\n/g, '<br>')
+            .replace(/([.?!])[ \t]+/g, '$1<br>')
+            .replace(/(?:<br>){2,}/g, '<br>');
     }
 
     mapRowToCard(vals, hdrs) {
