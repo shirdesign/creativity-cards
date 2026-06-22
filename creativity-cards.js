@@ -732,6 +732,10 @@ class CreativityCardsGame {
                 pointer-events: none;
             }
 
+            ${s} .ccg-pick-btn {
+                position: relative;
+                z-index: 12;
+            }
             ${s} .ccg-pick-btn[disabled] {
                 cursor: default;
                 opacity: .65;
