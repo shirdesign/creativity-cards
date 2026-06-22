@@ -847,7 +847,9 @@ class CreativityCardsGame {
             /* ── מובייל ─────────────────────────────────────────────────── */
             @media (max-width: 480px) {
                 ${s} .ccg-card-open { padding: 140px 8px 8px; gap: 8px; }
-                ${s} .ccg-card-visual-wrapper { width: min(310px, 90vw); }
+                ${s} .ccg-card-peek-wrap { width: min(310px, 90vw); }
+                ${s} .ccg-card-visual-wrapper { width: 100%; }
+                ${s} .ccg-card-peek { transform: rotate(-6deg) translateX(-8px) translateY(-4px); }
                 ${s} .ccg-card-open .ccg-logo-small { width: min(120px, 28vw); top: 8px; right: 10px; }
                 /* גופן קטן יותר במובייל כדי שהקלף לא יתארך יותר מדי */
                 ${s} .ccg-card-title  { font-size: clamp(20px, 5.5vw, 26px); font-weight: 700; }
