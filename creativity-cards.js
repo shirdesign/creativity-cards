@@ -663,10 +663,10 @@ class CreativityCardsGame {
             }
             ${s} .ccg-fan-card .ccg-card-back-label {
                 position: absolute;
-                top: 44%; left: 50%;
+                top: 50%; left: 50%;
                 transform: translate(-50%, -50%);
                 font-family: '${ff}', 'Assistant', 'Rubik', 'Arial', sans-serif;
-                font-size: clamp(10px, 1.8vw, 13px);
+                font-size: clamp(8px, 1.8vw, 18px);
                 font-weight: 800;
                 color: #1a1a1a;
                 white-space: normal;
