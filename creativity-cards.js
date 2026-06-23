@@ -653,7 +653,7 @@ class CreativityCardsGame {
                             filter .25s ease,
                             opacity .35s ease;
                 cursor: pointer;
-                filter: drop-shadow(0 6px 16px rgba(0,0,0,.28));
+                filter: drop-shadow(0 6px 16px rgba(0,0,0,.28)) drop-shadow(0 0 1px rgba(255,255,255,.15));
                 border: none;
                 background: transparent;
                 padding: 0;
@@ -666,7 +666,7 @@ class CreativityCardsGame {
                 top: 44%; left: 50%;
                 transform: translate(-50%, -50%);
                 font-family: '${ff}', 'Assistant', 'Rubik', 'Arial', sans-serif;
-                font-size: clamp(8px, 1.8vw, 13px);
+                font-size: clamp(10px, 1.8vw, 13px);
                 font-weight: 800;
                 color: #1a1a1a;
                 white-space: normal;
