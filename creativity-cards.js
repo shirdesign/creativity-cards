@@ -677,10 +677,10 @@ class CreativityCardsGame {
             }
             ${s} .ccg-deck-back-label {
                 position: absolute;
-                top: 44%; left: 50%;
+                top: 50%; left: 50%;
                 transform: translate(-50%, -50%);
                 font-family: '${ff}', 'Assistant', 'Rubik', 'Arial', sans-serif;
-                font-size: clamp(11px, 2.2vw, 16px);
+                font-size: clamp(11px, 2.2vw, 28px);
                 font-weight: 800;
                 color: #1a1a1a;
                 pointer-events: none;
